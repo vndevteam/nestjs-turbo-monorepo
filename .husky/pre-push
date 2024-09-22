@@ -1,7 +1,7 @@
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m'
-set -x
+
 changed_files=$(git diff --name-only HEAD HEAD~ -- '*.ts' '*.js')
 if [ -n "$changed_files" ]; then
   echo "${BLUE}Running tests due to changes in the following TS/JS files:${NC}"

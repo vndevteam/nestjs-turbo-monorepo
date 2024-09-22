@@ -1,12 +1,12 @@
 {
-  "name": "api",
+  "name": "user-api",
   "version": "0.0.1",
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "nest start --watch --port 3000",
+    "dev": "nest start --watch --port 3001",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
