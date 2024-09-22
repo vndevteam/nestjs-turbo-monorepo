@@ -27,7 +27,7 @@ importers:
         specifier: ^5.4.5
         version: 5.6.2
 
-  apps/api:
+  apps/admin-api:
     dependencies:
       '@nestjs/common':
         specifier: ^10.4.3
@@ -143,6 +143,76 @@ importers:
         specifier: ^5
         version: 5.6.2
 
+  apps/user-api:
+    dependencies:
+      '@nestjs/common':
+        specifier: ^10.4.3
+        version: 10.4.3(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/core':
+        specifier: ^10.4.3
+        version: 10.4.3(@nestjs/common@10.4.3(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.3)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/platform-express':
+        specifier: ^10.4.3
+        version: 10.4.3(@nestjs/common@10.4.3(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.3)
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+      rxjs:
+        specifier: ^7.8.1
+        version: 7.8.1
+    devDependencies:
+      '@nestjs/cli':
+        specifier: ^10.4.5
+        version: 10.4.5
+      '@nestjs/schematics':
+        specifier: ^10.1.4
+        version: 10.1.4(chokidar@3.6.0)(typescript@5.6.2)
+      '@nestjs/testing':
+        specifier: ^10.4.3
+        version: 10.4.3(@nestjs/common@10.4.3(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.3(@nestjs/common@10.4.3(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.3)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.3(@nestjs/common@10.4.3(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.3))
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
+      '@types/express':
+        specifier: ^4.17.21
+        version: 4.17.21
+      '@types/jest':
+        specifier: ^29.5.13
+        version: 29.5.13
+      '@types/node':
+        specifier: ^20.3.1
+        version: 20.16.5
+      '@types/supertest':
+        specifier: ^6.0.2
+        version: 6.0.2
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@20.16.5)(ts-node@10.9.2(@types/node@20.16.5)(typescript@5.6.2))
+      source-map-support:
+        specifier: ^0.5.21
+        version: 0.5.21
+      supertest:
+        specifier: ^6.3.3
+        version: 6.3.4
+      ts-jest:
+        specifier: ^29.2.5
+        version: 29.2.5(@babel/core@7.25.2)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.25.2))(jest@29.7.0(@types/node@20.16.5)(ts-node@10.9.2(@types/node@20.16.5)(typescript@5.6.2)))(typescript@5.6.2)
+      ts-loader:
+        specifier: ^9.5.1
+        version: 9.5.1(typescript@5.6.2)(webpack@5.94.0)
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@types/node@20.16.5)(typescript@5.6.2)
+      tsconfig-paths:
+        specifier: ^4.2.0
+        version: 4.2.0
+      typescript:
+        specifier: ^5.6.2
+        version: 5.6.2
+
   apps/web:
     dependencies:
       '@repo/ui':
@@ -181,6 +251,31 @@ importers:
         version: 14.2.13(eslint@8.57.1)(typescript@5.6.2)
       typescript:
         specifier: ^5
+        version: 5.6.2
+
+  packages/admin-api:
+    dependencies:
+      '@nestjs/mapped-types':
+        specifier: '*'
+        version: 2.0.5(@nestjs/common@10.4.3(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^20.3.1
+        version: 20.16.5
+      ts-loader:
+        specifier: ^9.4.3
+        version: 9.5.1(typescript@5.6.2)(webpack@5.94.0)
+      ts-node:
+        specifier: ^10.9.1
+        version: 10.9.2(@types/node@20.16.5)(typescript@5.6.2)
+      typescript:
+        specifier: ^5.6.2
         version: 5.6.2
 
   packages/eslint-config:
@@ -244,6 +339,31 @@ importers:
         version: 8.57.1
       typescript:
         specifier: ^5.3.3
+        version: 5.6.2
+
+  packages/user-api:
+    dependencies:
+      '@nestjs/mapped-types':
+        specifier: '*'
+        version: 2.0.5(@nestjs/common@10.4.3(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^20.3.1
+        version: 20.16.5
+      ts-loader:
+        specifier: ^9.4.3
+        version: 9.5.1(typescript@5.6.2)(webpack@5.94.0)
+      ts-node:
+        specifier: ^10.9.1
+        version: 10.9.2(@types/node@20.16.5)(typescript@5.6.2)
+      typescript:
+        specifier: ^5.6.2
         version: 5.6.2
 
 packages:
@@ -764,6 +884,19 @@ packages:
       '@nestjs/platform-express':
         optional: true
       '@nestjs/websockets':
+        optional: true
+
+  '@nestjs/mapped-types@2.0.5':
+    resolution: {integrity: sha512-bSJv4pd6EY99NX9CjBIyn4TVDoSit82DUZlL4I3bqNfy5Gt+gXTa86i3I/i0iIV9P4hntcGM5GyO+FhZAhxtyg==}
+    peerDependencies:
+      '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
+      class-transformer: ^0.4.0 || ^0.5.0
+      class-validator: ^0.13.0 || ^0.14.0
+      reflect-metadata: ^0.1.12 || ^0.2.0
+    peerDependenciesMeta:
+      class-transformer:
+        optional: true
+      class-validator:
         optional: true
 
   '@nestjs/platform-express@10.4.3':
@@ -6157,6 +6290,11 @@ snapshots:
       '@nestjs/platform-express': 10.4.3(@nestjs/common@10.4.3(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.3)
     transitivePeerDependencies:
       - encoding
+
+  '@nestjs/mapped-types@2.0.5(@nestjs/common@10.4.3(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)':
+    dependencies:
+      '@nestjs/common': 10.4.3(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      reflect-metadata: 0.2.2
 
   '@nestjs/platform-express@10.4.3(@nestjs/common@10.4.3(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.3)':
     dependencies:
