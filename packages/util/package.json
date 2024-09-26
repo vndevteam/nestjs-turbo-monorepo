@@ -1,10 +1,9 @@
 {
-  "name": "@repo/user-api",
+  "name": "@repo/util",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "pnpm build --watch",
     "build": "tsc -b -v",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\""
   },
@@ -34,7 +33,9 @@
     }
   },
   "dependencies": {
-    "@nestjs/mapped-types": "*"
+    "@nestjs/mapped-types": "*",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

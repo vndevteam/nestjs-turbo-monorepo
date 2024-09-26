@@ -5,7 +5,7 @@
     "baseUrl": "src",
     "esModuleInterop": true,
     "incremental": false,
-    "outDir": "dist"
+    "outDir": "dist",
   },
   "include": ["src"],
   "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]

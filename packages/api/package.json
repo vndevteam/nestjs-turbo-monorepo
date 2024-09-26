@@ -1,5 +1,5 @@
 {
-  "name": "@repo/admin-api",
+  "name": "@repo/api",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
@@ -34,7 +34,10 @@
     }
   },
   "dependencies": {
-    "@nestjs/mapped-types": "*"
+    "@nestjs/config": "^3.2.3",
+    "@nestjs/mapped-types": "*",
+    "@repo/util": "workspace:*",
+    "class-validator": "^0.14.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

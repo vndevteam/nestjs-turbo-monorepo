@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalEnv": ["NODE_ENV", "APP_PORT", "PORT", "APP_NAME", "APP_URL", "APP_DEBUG", "API_PREFIX", "APP_FALLBACK_LANGUAGE", "APP_LOG_LEVEL", "APP_LOG_SERVICE", "APP_CORS_ORIGIN"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
