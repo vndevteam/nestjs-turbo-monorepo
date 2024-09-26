@@ -12,7 +12,7 @@ import {
   Min,
 } from 'class-validator';
 import process from 'node:process';
-import validateConfig from '@repo/util/validate-config';
+import validateConfig from '@repo/utils/validate-config';
 import { AppConfig } from './app-config.type';
 import { Environment, LogService } from '../constants/app.constant';
 

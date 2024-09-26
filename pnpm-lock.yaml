@@ -44,9 +44,9 @@ importers:
       '@repo/api':
         specifier: workspace:*
         version: link:../../packages/api
-      '@repo/util':
+      '@repo/utils':
         specifier: workspace:*
-        version: link:../../packages/util
+        version: link:../../packages/utils
       class-validator:
         specifier: ^0.14.1
         version: 0.14.1
@@ -169,9 +169,9 @@ importers:
       '@repo/api':
         specifier: workspace:*
         version: link:../../packages/api
-      '@repo/util':
+      '@repo/utils':
         specifier: workspace:*
-        version: link:../../packages/util
+        version: link:../../packages/utils
       class-validator:
         specifier: ^0.14.1
         version: 0.14.1
@@ -279,9 +279,9 @@ importers:
       '@nestjs/mapped-types':
         specifier: '*'
         version: 2.0.5(@nestjs/common@10.4.3(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)
-      '@repo/util':
+      '@repo/utils':
         specifier: workspace:*
-        version: link:../util
+        version: link:../utils
       class-validator:
         specifier: ^0.14.1
         version: 0.14.1
@@ -368,7 +368,7 @@ importers:
         specifier: ^5.3.3
         version: 5.6.2
 
-  packages/util:
+  packages/utils:
     dependencies:
       '@nestjs/mapped-types':
         specifier: '*'
