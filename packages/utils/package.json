@@ -1,9 +1,10 @@
 {
-  "name": "@repo/util",
+  "name": "@repo/utils",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
   "scripts": {
+    "dev": "pnpm build --watch",
     "build": "tsc -b -v",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\""
   },
