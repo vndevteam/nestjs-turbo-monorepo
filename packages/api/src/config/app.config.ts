@@ -12,9 +12,9 @@ import {
   Min,
 } from 'class-validator';
 import process from 'node:process';
-import validateConfig from '@repo/utils/validate-config';
 import { AppConfig } from './app-config.type';
 import { Environment, LogService } from '../constants/app.constant';
+import { validateConfig } from '@repo/utils/validate-config';
 
 class EnvironmentVariablesValidator {
   @IsEnum(Environment)
