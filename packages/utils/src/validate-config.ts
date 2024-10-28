@@ -1,7 +1,7 @@
 import { ClassConstructor, plainToClass } from 'class-transformer';
 import { validateSync } from 'class-validator';
 
-function validateConfig<T extends object>(
+export function validateConfig<T extends object>(
   config: Record<string, unknown>,
   envVariablesClass: ClassConstructor<T>,
 ) {
@@ -28,5 +28,3 @@ function validateConfig<T extends object>(
   }
   return validatedConfig;
 }
-
-export default validateConfig;

@@ -3,8 +3,8 @@
   "display": "NestJS",
   "extends": "./base.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "Node10",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
