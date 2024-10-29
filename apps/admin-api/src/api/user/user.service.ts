@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UserService {
-  createUser(createUserDto: CreateUserDto) {
-    throw new Error('Method not implemented.');
+  create(dto: CreateUserDto) {
+    const { username, email, password } = dto;
   }
 }

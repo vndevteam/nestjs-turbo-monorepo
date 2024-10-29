@@ -1,0 +1,58 @@
+{
+  "name": "@repo/database-typeorm",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "dev": "pnpm build --watch",
+    "build": "tsc -b -v",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "typeorm": "env-cmd typeorm-ts-node-commonjs -d src/data-source.ts",
+    "migration:up": "pnpm typeorm migration:run",
+    "migration:down": "pnpm typeorm migration:revert",
+    "migration:show": "pnpm typeorm migration:show",
+    "migration:create": "typeorm migration:create",
+    "migration:generate": "pnpm typeorm migration:generate --pretty",
+    "db:create": "env-cmd ts-node ./node_modules/typeorm-extension/bin/cli.cjs db:create",
+    "db:drop": "env-cmd ts-node ./node_modules/typeorm-extension/bin/cli.cjs db:drop",
+    "seed:run": "env-cmd ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run",
+    "seed:create": "env-cmd ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:create"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "./dist/**"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    }
+  },
+  "dependencies": {
+    "@nestjs/config": "^3.2.3",
+    "@nestjs/mapped-types": "*",
+    "@repo/utils": "workspace:*",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "env-cmd": "^10.1.0",
+    "pg": "^8.13.1",
+    "typeorm": "^0.3.20",
+    "typeorm-extension": "^3.6.2"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^20.3.1",
+    "ts-loader": "^9.4.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.6.2"
+  }
+}
