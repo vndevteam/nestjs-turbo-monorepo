@@ -2,7 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   JoinColumn,
   JoinTable,
   ManyToMany,
@@ -13,9 +12,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
-import { UserEntity } from './user.entity';
-import { TagEntity } from './tag.entity';
 import { CommentEntity } from './comment.entity';
+import { TagEntity } from './tag.entity';
+import { UserEntity } from './user.entity';
 
 @Entity('article')
 export class ArticleEntity extends AbstractEntity {

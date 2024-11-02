@@ -1,3 +1,4 @@
+import { hashPassword as hashPass } from '@repo/utils/password.util';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -10,7 +11,6 @@ import {
   type Relation,
 } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
-import { hashPassword as hashPass } from '@repo/utils/password.util';
 import { ArticleEntity } from './article.entity';
 
 @Entity('user')
