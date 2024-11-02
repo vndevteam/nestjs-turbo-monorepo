@@ -6,7 +6,7 @@
     "dev": "next dev --turbo --port 4000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint \"{src,app,test}/**/*.{ts,tsx}\" --fix"
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
@@ -20,8 +20,8 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.13",
+    "eslint": "^9.13.0",
+    "eslint-config-next": "15.0.2",
     "typescript": "^5"
   }
 }
