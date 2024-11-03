@@ -1,5 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty, type ApiPropertyOptions } from '@nestjs/swagger';
+import { Constructor } from '@repo/utils';
 import { Type } from 'class-transformer';
 import {
   IsBoolean,
@@ -22,7 +23,6 @@ import {
   NotEquals,
   ValidateNested,
 } from 'class-validator';
-import { Constructor } from '../types';
 import { ToBoolean, ToLowerCase, ToUpperCase } from './transform.decorators';
 import { IsNullable } from './validators/is-nullable.decorator';
 import { IsPassword } from './validators/is-password.decorator';

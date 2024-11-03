@@ -4,6 +4,7 @@
 -->
 
 # Pull Request types
+
 <!-- Choose only something to come under. -->
 
 - 🐛 Bug Fix
@@ -21,9 +22,11 @@
 - 👾 Others
 
 # Description
+
 <!-- Write detailed explanations, URL of explanatory materials, Issue ticket, etc -->
 
 # Checklist
+
 <!-- Write review checklist for dev and reviewer -->
 
 - [ ] 1. No more unconfirmed specs in the PR
@@ -40,4 +43,5 @@
 (Screenshot or Video)
 
 # Discussion
+
 <!-- Write what you want to check, what you don't have to check, etc. -->

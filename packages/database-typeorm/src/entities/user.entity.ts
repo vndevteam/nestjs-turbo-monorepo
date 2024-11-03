@@ -4,6 +4,7 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  Index,
   JoinTable,
   ManyToMany,
   OneToMany,
@@ -19,9 +20,11 @@ export class UserEntity extends AbstractEntity {
   id!: number;
 
   @Column()
+  @Index('UQ_user_username', ['username'], { unique: true })
   username!: string;
 
   @Column()
+  @Index('UQ_user_email', ['email'], { unique: true })
   email!: string;
 
   @Column()
