@@ -44,6 +44,15 @@
     "lint": {
       "dependsOn": ["^lint"]
     },
-    "test:e2e": {}
+    "test:e2e": {},
+    "@repo/database-typeorm#migration:up": {
+      "cache": false
+    },
+    "@repo/database-typeorm#migration:down": {
+      "cache": false
+    },
+    "@repo/database-typeorm#migration:generate": {
+      "cache": false
+    }
   }
 }

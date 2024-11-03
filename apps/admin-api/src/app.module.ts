@@ -1,19 +1,34 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import appConfig from '@repo/api/config/app.config';
+import databaseConfig from '@repo/database-typeorm/config/database.config';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import { ApiModule } from './api/api.module';
+import authConfig from './api/auth/config/auth.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TypeOrmConfigService } from './database/typeorm-config.service';
+
+const configModule = ConfigModule.forRoot({
+  isGlobal: true,
+  load: [appConfig, databaseConfig, authConfig],
+  envFilePath: ['.env'],
+});
+
+const dbModule = TypeOrmModule.forRootAsync({
+  useClass: TypeOrmConfigService,
+  dataSourceFactory: async (options: DataSourceOptions) => {
+    if (!options) {
+      throw new Error('Invalid options passed');
+    }
+
+    return new DataSource(options).initialize();
+  },
+});
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [appConfig],
-      envFilePath: ['.env'],
-    }),
-    ApiModule,
-  ],
+  imports: [configModule, dbModule, ApiModule],
   controllers: [AppController],
   providers: [AppService],
 })
