@@ -5,7 +5,7 @@ export class UserDto {
   email: string;
 
   @Expose()
-  token: string;
+  token?: string;
 
   @Expose()
   username: string;

@@ -1,5 +1,5 @@
 import { Body, Controller, Post, SerializeOptions } from '@nestjs/common';
-import { Public } from '@repo/api/decorators/public.decorator';
+import { Public } from '@repo/api';
 import { UserResDto } from '../user/dto/user.dto';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';

@@ -3,9 +3,9 @@
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,
+    "declaration": true,
     "incremental": false,
-    "baseUrl": ".",
-    "rootDir": "./src",
+    "baseUrl": "./",
     "outDir": "./dist"
   },
   "include": ["src"],

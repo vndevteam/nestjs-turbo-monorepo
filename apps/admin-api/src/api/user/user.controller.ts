@@ -1,8 +1,15 @@
-import { Body, Controller, Get, Post, SerializeOptions } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  SerializeOptions,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CurrentUser } from '@repo/api/decorators/current-user.decorator';
-import { Public } from '@repo/api/decorators/public.decorator';
+import { CurrentUser, Public } from '@repo/api';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { UserResDto } from './dto/user.dto';
 import { UserService } from './user.service';
 
@@ -24,5 +31,14 @@ export class UserController {
   @SerializeOptions({ type: UserResDto })
   async create(@Body('user') userData: CreateUserDto): Promise<UserResDto> {
     return this.userService.create(userData);
+  }
+
+  @Put('user')
+  @SerializeOptions({ type: UserResDto })
+  async update(
+    @CurrentUser('id') userId: number,
+    @Body('user') userData: UpdateUserDto,
+  ): Promise<UserResDto> {
+    return this.userService.update(userId, userData);
   }
 }
