@@ -2,6 +2,7 @@
   "name": "nestjs-turbo-monorepo",
   "private": true,
   "scripts": {
+    "clean": "turbo clean",
     "build": "turbo build",
     "dev": "turbo dev",
     "test": "turbo test",
