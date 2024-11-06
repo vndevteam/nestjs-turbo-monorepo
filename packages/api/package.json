@@ -4,6 +4,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "clean": "rm -rf dist",
     "dev": "pnpm build --watch",
     "build": "tsc -b -v",
     "lint": "eslint \"{src,test}/**/*.ts\""

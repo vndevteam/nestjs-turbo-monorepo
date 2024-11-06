@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "clean": "rm -rf dist",
     "dev": "next dev --turbo --port 4000",
     "build": "next build",
     "start": "next start",
