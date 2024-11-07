@@ -1,6 +1,6 @@
 import { EmailField, PasswordField, StringField } from '@repo/api';
+import { lowerCaseTransformer } from '@repo/common';
 import { Transform } from 'class-transformer';
-import { lowerCaseTransformer } from '../../../../../../packages/common/dist';
 
 export class CreateUserDto {
   @StringField()
