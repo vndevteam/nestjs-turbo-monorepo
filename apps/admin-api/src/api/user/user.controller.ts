@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Post, SerializeOptions } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CurrentUser } from '@repo/api/decorators/current-user.decorator';
-import { Public } from '@repo/api/decorators/public.decorator';
+import { CurrentUser, Public } from '@repo/api';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserResDto } from './dto/user.dto';
 import { UserService } from './user.service';

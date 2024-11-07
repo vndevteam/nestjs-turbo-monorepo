@@ -44,7 +44,7 @@
   "dependencies": {
     "@nestjs/config": "^3.3.0",
     "@nestjs/mapped-types": "*",
-    "@repo/utils": "workspace:*",
+    "@repo/common": "workspace:*",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "env-cmd": "^10.1.0",

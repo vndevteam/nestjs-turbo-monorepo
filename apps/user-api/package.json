@@ -27,7 +27,7 @@
     "@nestjs/core": "^10.4.6",
     "@nestjs/platform-fastify": "^10.4.6",
     "@repo/api": "workspace:*",
-    "@repo/utils": "workspace:*",
+    "@repo/common": "workspace:*",
     "class-validator": "^0.14.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
