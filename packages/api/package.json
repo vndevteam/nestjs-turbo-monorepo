@@ -32,7 +32,7 @@
     "@nestjs/config": "^3.3.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/swagger": "^8.0.1",
-    "@repo/utils": "workspace:*",
+    "@repo/common": "workspace:*",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "fastify": "^4.28.1",

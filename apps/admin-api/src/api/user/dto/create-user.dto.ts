@@ -1,5 +1,5 @@
 import { EmailField, PasswordField, StringField } from '@repo/api';
-import { lowerCaseTransformer } from '@repo/utils/transformers/lower-case.transformer';
+import { lowerCaseTransformer } from '@repo/common';
 import { Transform } from 'class-transformer';
 
 export class CreateUserDto {

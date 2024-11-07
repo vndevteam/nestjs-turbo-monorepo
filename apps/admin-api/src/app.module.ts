@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import appConfig from '@repo/api/config/app.config';
-import databaseConfig from '@repo/database-typeorm/config/database.config';
+import { appConfig } from '@repo/api';
+import { databaseConfig } from '@repo/database-typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { ApiModule } from './api/api.module';
 import authConfig from './api/auth/config/auth.config';

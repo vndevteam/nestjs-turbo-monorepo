@@ -1,4 +1,4 @@
-import { AppConfig } from '@repo/api/config/app-config.type';
+import { AppConfig } from '@repo/api';
 
 export type AllConfigType = {
   app: AppConfig;

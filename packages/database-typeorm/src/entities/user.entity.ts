@@ -1,4 +1,4 @@
-import { hashPassword as hashPass } from '@repo/utils/password.util';
+import { hashPassword as hashPass } from '@repo/common';
 import {
   BeforeInsert,
   BeforeUpdate,
