@@ -1,3 +1,4 @@
+import helmet from '@fastify/helmet';
 import {
   ClassSerializerInterceptor,
   HttpStatus,
@@ -10,7 +11,10 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory, Reflector } from '@nestjs/core';
-import { NestFastifyApplication } from '@nestjs/platform-fastify';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AuthService } from './api/auth/auth.service';
 import { AppModule } from './app.module';
@@ -41,7 +45,14 @@ function setupSwagger(app: INestApplication) {
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestFastifyApplication>(AppModule);
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(),
+  );
+
+  // Setup security headers
+  app.register(helmet);
+
   const configService = app.get(ConfigService<AllConfigType>);
   const reflector = app.get(Reflector);
 
