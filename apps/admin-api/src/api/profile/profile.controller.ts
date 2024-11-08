@@ -6,10 +6,12 @@ import {
   Post,
   SerializeOptions,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AuthOptional, CurrentUser } from '@repo/api';
 import { ProfileResDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
 
+@ApiTags('Profile')
 @Controller('profiles')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}

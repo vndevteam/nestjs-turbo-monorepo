@@ -46,10 +46,6 @@ class EnvironmentVariablesValidator {
 
   @IsString()
   @IsOptional()
-  API_PREFIX: string;
-
-  @IsString()
-  @IsOptional()
   APP_FALLBACK_LANGUAGE: string;
 
   @IsString()
@@ -67,6 +63,14 @@ class EnvironmentVariablesValidator {
   )
   @IsOptional()
   APP_CORS_ORIGIN: string;
+
+  @IsString()
+  @IsOptional()
+  API_PREFIX: string;
+
+  @IsBoolean()
+  @IsOptional()
+  API_DOCS_ENABLED: boolean;
 }
 
 export default registerAs<AppConfig>('app', () => {
@@ -90,6 +94,7 @@ export default registerAs<AppConfig>('app', () => {
     logLevel: process.env.APP_LOG_LEVEL || 'warn',
     logService: process.env.APP_LOG_SERVICE || LogService.CONSOLE,
     corsOrigin: getCorsOrigin(),
+    apiDocsEnabled: process.env.API_DOCS_ENABLED === 'true',
   };
 });
 

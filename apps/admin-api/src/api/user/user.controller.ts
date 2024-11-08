@@ -13,7 +13,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserResDto } from './dto/user.dto';
 import { UserService } from './user.service';
 
-@ApiTags('user')
+@ApiTags('User')
 @Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
