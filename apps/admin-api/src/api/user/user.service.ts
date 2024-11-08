@@ -1,5 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ErrorCode } from '@/constants/error-code.constant';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ValidationException } from '@repo/api';
 import { UserEntity } from '@repo/database-typeorm';
 import { Repository } from 'typeorm';
 import { AuthService } from '../auth/auth.service';
@@ -31,7 +33,7 @@ export class UserService {
     });
 
     if (user) {
-      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+      throw new ValidationException(ErrorCode.E001);
     }
 
     const newUser = this.userRepository.create({ username, email, password });
@@ -49,7 +51,7 @@ export class UserService {
     const user = await this.userRepository.findOneBy({ id: userId });
 
     if (!user) {
-      throw new HttpException('User does not exist', HttpStatus.BAD_REQUEST);
+      throw new ValidationException(ErrorCode.E002);
     }
 
     const savedUser = await this.userRepository.save({

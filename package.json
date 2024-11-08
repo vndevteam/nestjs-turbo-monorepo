@@ -1,6 +1,7 @@
 {
   "name": "nestjs-turbo-monorepo",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "clean": "turbo clean",
     "build": "turbo build",

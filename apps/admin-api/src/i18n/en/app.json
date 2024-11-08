@@ -1,0 +1,12 @@
+{
+  "user": {
+    "username_or_email_exists": "Username or email already exists",
+    "not_found": "User not found",
+    "exist": "User already exists"
+  },
+  "profile": {
+    "not_found": "Profile not found",
+    "following_self": "You can't follow yourself",
+    "already_followed": "Already following this user"
+  }
+}

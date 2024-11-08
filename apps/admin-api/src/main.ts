@@ -11,7 +11,7 @@ import {
   VersioningType,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory, Reflector } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -20,6 +20,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AuthService } from './api/auth/auth.service';
 import { AppModule } from './app.module';
 import { AllConfigType } from './config/config.type';
+import { GlobalExceptionFilter } from './filters/global-exception.filter';
 import { AuthGuard } from './guards/auth.guard';
 
 function setupSwagger(app: INestApplication) {
@@ -88,6 +89,12 @@ async function bootstrap() {
   });
 
   app.useGlobalGuards(new AuthGuard(reflector, app.get(AuthService)));
+  app.useGlobalFilters(
+    new GlobalExceptionFilter(
+      app.get(HttpAdapterHost),
+      configService.getOrThrow('app.debug', { infer: true }),
+    ),
+  );
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

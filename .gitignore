@@ -50,6 +50,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Monitoring
+.clinic/
+
 # Misc
 .DS_Store
 *.pem
