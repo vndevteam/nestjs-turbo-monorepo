@@ -63,7 +63,7 @@ export class UserEntity extends AbstractEntity {
   })
   favorites: Relation<ArticleEntity[]>;
 
-  @ManyToMany(() => UserEntity, (user) => user.following)
+  @ManyToMany(() => UserEntity, (user) => user.followers)
   @JoinTable({
     name: 'user_follows',
     joinColumn: {
@@ -77,8 +77,8 @@ export class UserEntity extends AbstractEntity {
       foreignKeyConstraintName: 'FK_user_follows_following',
     },
   })
-  followers: Relation<UserEntity[]>;
-
-  @ManyToMany(() => UserEntity, (user) => user.followers)
   following: Relation<UserEntity[]>;
+
+  @ManyToMany(() => UserEntity, (user) => user.following)
+  followers: Relation<UserEntity[]>;
 }
