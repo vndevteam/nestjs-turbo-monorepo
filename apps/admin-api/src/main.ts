@@ -1,3 +1,4 @@
+import compression from '@fastify/compress';
 import helmet from '@fastify/helmet';
 import {
   ClassSerializerInterceptor,
@@ -52,6 +53,9 @@ async function bootstrap() {
 
   // Setup security headers
   app.register(helmet);
+
+  // For high-traffic websites in production, it is strongly recommended to offload compression from the application server - typically in a reverse proxy (e.g., Nginx). In that case, you should not use compression middleware.
+  app.register(compression);
 
   const configService = app.get(ConfigService<AllConfigType>);
   const reflector = app.get(Reflector);
