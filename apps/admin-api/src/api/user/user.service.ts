@@ -16,7 +16,9 @@ export class UserService {
   ) {}
 
   async get(currentUser: { id: number; token: string }): Promise<UserResDto> {
-    const user = await this.userRepository.findOneBy({ id: currentUser.id });
+    const user = await this.userRepository.findOneByOrFail({
+      id: currentUser.id,
+    });
 
     return { user: { ...user, token: currentUser.token } };
   }
