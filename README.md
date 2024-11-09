@@ -19,7 +19,7 @@ A monorepo boilerplate built with [Turborepo](https://turbo.build/repo) and [Nes
 
 ```sh
 # Clone the repository
-git clone https://github.com/vndevteam/nestjs-turbo-monorepo.git
+git clone https://github.com/vndevteam/nestjs-turbo.git
 
 # Create environment variables file.
 cp apps/admin-api/.env.example apps/admin-api/.env
@@ -110,4 +110,4 @@ Learn more about the power of Turborepo:
 
 ## Support
 
-[Discuss on Github](https://github.com/vndevteam/nestjs-turbo-monorepo/discussions)
+[Discuss on Github](https://github.com/vndevteam/nestjs-turbo/discussions)
