@@ -7,7 +7,7 @@ const withNextra = nextra({
 });
 
 const isProduction = process.env.NODE_ENV === "production";
-const assetPrefix = isProduction ? "/nestjs-turbo-monorepo" : "";
+const assetPrefix = isProduction ? "/nestjs-turbo" : "";
 
 const nextConfig = {
   images: {

@@ -1,5 +1,5 @@
 {
-  "name": "nestjs-turbo-monorepo",
+  "name": "nestjs-turbo",
   "private": true,
   "license": "MIT",
   "scripts": {
