@@ -1,0 +1,9 @@
+{
+  "validation": {
+    "error": "Lỗi xác thực dữ liệu"
+  },
+  "error": {
+    "internal_server_error": "Đã xảy ra lỗi hệ thống",
+    "entity_not_found": "Không tìm thấy đối tượng"
+  }
+}

@@ -1,5 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { ErrorCode } from '@/constants/error-code.constant';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ValidationException } from '@repo/api';
 import { UserEntity } from '@repo/database-typeorm';
 import { Repository } from 'typeorm';
 import { ProfileDto, ProfileResDto } from './dto/profile.dto';
@@ -16,7 +18,7 @@ export class ProfileService {
     const targetProfile = await this.userRepository.findOneBy({ username });
 
     if (!targetProfile) {
-      throw new BadRequestException('Profile not found');
+      throw new ValidationException(ErrorCode.E101);
     }
 
     const profile: ProfileDto = {
@@ -50,7 +52,7 @@ export class ProfileService {
     });
 
     if (!user) {
-      throw new BadRequestException('User not found');
+      throw new ValidationException(ErrorCode.E002);
     }
 
     // Check if the user is already following the target user
@@ -59,7 +61,7 @@ export class ProfileService {
     );
 
     if (isAlreadyFollowing) {
-      throw new BadRequestException('Already following this user');
+      throw new ValidationException(ErrorCode.E103);
     }
 
     // Find the user to follow
@@ -68,7 +70,7 @@ export class ProfileService {
     });
 
     if (!followUser) {
-      throw new BadRequestException('User to follow not found');
+      throw new ValidationException(ErrorCode.E101);
     }
 
     // Add the user to follow to the following list
@@ -95,7 +97,7 @@ export class ProfileService {
     });
 
     if (!user) {
-      throw new BadRequestException('User not found');
+      throw new ValidationException(ErrorCode.E002);
     }
 
     // Find the user to unfollow
@@ -104,7 +106,7 @@ export class ProfileService {
     });
 
     if (!followUser) {
-      throw new BadRequestException('User to unfollow not found');
+      throw new ValidationException(ErrorCode.E101);
     }
 
     // Remove the user to unfollow from the following list

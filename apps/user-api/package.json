@@ -4,7 +4,7 @@
   "description": "",
   "author": "",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "clean": "rm -rf dist",
     "dev": "nest start --watch --port 3001",

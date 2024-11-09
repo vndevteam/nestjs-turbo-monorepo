@@ -1,0 +1,12 @@
+{
+  "user": {
+    "username_or_email_exists": "Tên người dùng hoặc email đã tồn tại",
+    "not_found": "Người dùng không tìm thấy",
+    "exist": "Người dùng đã tồn tại"
+  },
+  "profile": {
+    "not_found": "Hồ sơ không tìm thấy",
+    "following_self": "Bạn không thể theo dõi chính mình",
+    "already_followed": "Đã theo dõi người dùng này"
+  }
+}
