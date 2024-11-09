@@ -1,4 +1,4 @@
-import { constraintErrors } from '@/constants/constraint-errors';
+import { ConstraintErrors } from '@/constants/constraint-errors';
 import { ErrorCode } from '@/constants/error-code.constant';
 import { I18nTranslations } from '@/generated/i18n.generated';
 import {
@@ -108,7 +108,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
           status: HttpStatus.CONFLICT,
           message: r.constraint
             ? this.i18n.t(
-                (constraintErrors[r.constraint] ||
+                (ConstraintErrors[r.constraint] ||
                   r.constraint) as keyof I18nTranslations,
               )
             : undefined,
