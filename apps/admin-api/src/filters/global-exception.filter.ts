@@ -7,7 +7,6 @@ import {
   type ExceptionFilter,
   HttpException,
   HttpStatus,
-  Logger,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
@@ -25,7 +24,7 @@ import { EntityNotFoundError, QueryFailedError } from 'typeorm';
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
   private i18n: I18nContext<I18nTranslations>;
-  private readonly logger = new Logger(GlobalExceptionFilter.name);
+  private logger;
 
   constructor(
     private readonly httpAdapterHost: HttpAdapterHost,
@@ -35,19 +34,16 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost): void {
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
-    const request = ctx.getRequest();
-    this.i18n = request.i18nContext;
+    this.i18n = I18nContext.current<I18nTranslations>(host);
+    this.logger = ctx.getRequest().log;
 
     let error: ErrorDto;
 
     if (exception instanceof UnprocessableEntityException) {
-      this.logger.debug(exception);
       error = handleUnprocessableEntityException(exception);
     } else if (exception instanceof ValidationException) {
-      this.logger.debug(exception);
       error = this.handleValidationException(exception);
     } else if (exception instanceof HttpException) {
-      this.logger.debug(exception);
       error = handleHttpException(exception);
     } else if (exception instanceof QueryFailedError) {
       this.logger.error(error);

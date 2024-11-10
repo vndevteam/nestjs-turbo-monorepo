@@ -17,9 +17,12 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { FastifyPinoLoggerService } from '@repo/api';
+import hyperid from 'hyperid';
 import { AuthService } from './api/auth/auth.service';
 import { AppModule } from './app.module';
 import { AllConfigType } from './config/config.type';
+import { REQUEST_ID_HEADER } from './constants/app.constant';
 import { GlobalExceptionFilter } from './filters/global-exception.filter';
 import { AuthGuard } from './guards/auth.guard';
 
@@ -47,10 +50,62 @@ function setupSwagger(app: INestApplication) {
 }
 
 async function bootstrap() {
+  const fastifyAdapter = new FastifyAdapter({
+    requestIdHeader: REQUEST_ID_HEADER,
+    genReqId: (req: any) => {
+      return req.headers[REQUEST_ID_HEADER] || hyperid().uuid;
+    },
+    logger: {
+      messageKey: 'msg',
+      transport: {
+        target: 'pino-pretty',
+        options: {
+          colorize: true,
+          singleLine: true,
+        },
+      },
+      level: 'debug',
+      serializers: {
+        res(reply) {
+          // The default
+          return {
+            statusCode: reply.statusCode,
+          };
+        },
+        req(request) {
+          return {
+            method: request.method,
+            url: request.url,
+            path: request.routeOptions.url,
+            parameters: request.params,
+            // Including the headers in the log could be in violation
+            // of privacy laws, e.g. GDPR. You should use the "redact" option to
+            // remove sensitive fields. It could also leak authentication data in
+            // the logs.
+            headers: request.headers,
+          };
+        },
+      },
+    },
+    childLoggerFactory: (logger, bindings, loggerOpts, req) => {
+      bindings.reqId = req['id'];
+      return logger.child(bindings, loggerOpts);
+    },
+  });
+
+  const fastifyInstance = fastifyAdapter.getInstance();
+  const log = fastifyInstance.log;
+  const logger = new FastifyPinoLoggerService(log);
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    fastifyAdapter,
+    {
+      bufferLogs: true,
+    },
   );
+
+  app.useLogger(logger);
 
   // Setup security headers
   app.register(helmet);
@@ -71,14 +126,14 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type, Accept',
     credentials: true,
   });
-  console.info('CORS Origin:', corsOrigin);
+  logger.log(`CORS Origin: ${corsOrigin.toString()}`);
 
   // Use global prefix if you don't have subdomain
   app.setGlobalPrefix(
     configService.getOrThrow('app.apiPrefix', { infer: true }),
     {
       exclude: [
-        { method: RequestMethod.GET, path: '/' },
+        // { method: RequestMethod.GET, path: '/' }, // Middeware not working when using exclude by root path https://github.com/nestjs/nest/issues/13401
         { method: RequestMethod.GET, path: 'health' },
       ],
     },
@@ -117,8 +172,6 @@ async function bootstrap() {
   }
 
   await app.listen(configService.getOrThrow('app.port', { infer: true }));
-
-  console.info(`Server running on ${await app.getUrl()}`);
 }
 
 bootstrap();

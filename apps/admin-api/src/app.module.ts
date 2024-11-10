@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { appConfig, Environment } from '@repo/api';
@@ -17,6 +17,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AllConfigType } from './config/config.type';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
+import { RequestIdMiddleware } from './middlewares/request-id.middleware';
 
 const configModule = ConfigModule.forRoot({
   isGlobal: true,
@@ -68,4 +69,8 @@ const i18nModule = I18nModule.forRootAsync({
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestIdMiddleware).forRoutes('*');
+  }
+}

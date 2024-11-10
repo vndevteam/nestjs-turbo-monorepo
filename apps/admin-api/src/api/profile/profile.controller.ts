@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Req,
   SerializeOptions,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -29,9 +30,11 @@ export class ProfileController {
   @Post(':username/follow')
   @SerializeOptions({ type: ProfileResDto })
   follow(
+    @Req() req: any,
     @CurrentUser('id') userId: number,
     @Param('username') username: string,
   ): Promise<ProfileResDto> {
+    req.log.info('User is following');
     return this.profileService.follow(userId, username);
   }
 
