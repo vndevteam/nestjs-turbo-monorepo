@@ -2,6 +2,7 @@ import { AllConfigType } from '@/config/config.type';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
+import { TypeOrmCustomLogger } from '@repo/database-typeorm';
 import { join } from 'path';
 
 @Injectable()
@@ -24,7 +25,14 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       }),
       dropSchema: false,
       keepConnectionAlive: true,
-      logging: this.configService.get('database.logging', { infer: true }),
+      // Only use logging or logger
+      // logging: this.configService.get('database.logging', { infer: true }),
+      logger: TypeOrmCustomLogger.getInstance(
+        'default',
+        this.configService.get('database.logging', { infer: true })
+          ? ['error', 'warn', 'query', 'schema']
+          : ['error', 'warn'],
+      ),
       entities: [join(nodeModulesDir, 'dist', '**', '*.entity.{ts,js}')],
       poolSize: this.configService.get('database.maxConnections', {
         infer: true,
