@@ -3,7 +3,7 @@ import hyperid from 'hyperid';
 
 export const REQUEST_ID_HEADER = 'X-Request-Id';
 
-type Env = 'development' | 'staging' | 'production';
+export type FastifyLoggerEnv = 'development' | 'staging' | 'production';
 
 const developmentLogger = (): any => {
   return {
@@ -32,6 +32,8 @@ const developmentLogger = (): any => {
       },
     },
     customSuccessMessage,
+    customReceivedMessage,
+    customErrorMessage,
   } as FastifyLoggerOptions & PinoLoggerOptions;
 };
 
@@ -39,11 +41,21 @@ const customSuccessMessage = (req: any, res: any, responseTime: number) => {
   return `[${req.id || '*'}] "${req.method} ${req.url}" ${res.statusCode} - "${req.headers['host']}" "${req.headers['user-agent']}" - ${responseTime} ms`;
 };
 
+const customReceivedMessage = (req: any) => {
+  return `[${req.id || '*'}] "${req.method} ${req.url}"`;
+};
+
+const customErrorMessage = (req: any, res: any, err: any) => {
+  return `[${req.id || '*'}] "${req.method} ${req.url}" ${res.statusCode} - "${req.headers['host']}" "${req.headers['user-agent']}" - message: ${err.message}`;
+};
+
 export function genReqId() {
   return (req: any) => req.headers[REQUEST_ID_HEADER] || hyperid().uuid;
 }
 
-export function fastifyPinoOptions(env: Env) {
+export function fastifyPinoOptions(
+  env: FastifyLoggerEnv,
+): FastifyLoggerOptions | boolean {
   const envToLogger = {
     development: developmentLogger(),
     production: {

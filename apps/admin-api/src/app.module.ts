@@ -3,7 +3,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { appConfig, Environment } from '@repo/api';
 import { databaseConfig } from '@repo/database-typeorm';
-import { AsyncContextProvider, FastifyPinoLogger } from '@repo/nest-common';
+import {
+  AsyncContextProvider,
+  FastifyPinoLogger,
+  RequestIdMiddleware,
+} from '@repo/nest-common';
 import {
   AcceptLanguageResolver,
   HeaderResolver,
@@ -18,7 +22,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AllConfigType } from './config/config.type';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
-import { RequestIdMiddleware } from './middlewares/request-id.middleware';
 
 const configModule = ConfigModule.forRoot({
   isGlobal: true,

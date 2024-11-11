@@ -15,9 +15,9 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { Environment } from '@repo/api';
 import {
   AsyncContextProvider,
+  FastifyLoggerEnv,
   FastifyPinoLogger,
   fastifyPinoOptions,
   genReqId,
@@ -34,7 +34,7 @@ async function bootstrap() {
   const fastifyAdapter = new FastifyAdapter({
     requestIdHeader: REQUEST_ID_HEADER,
     genReqId: genReqId(),
-    logger: fastifyPinoOptions(Environment[process.env.NODE_ENV.toUpperCase()]),
+    logger: fastifyPinoOptions(process.env.NODE_ENV as FastifyLoggerEnv),
   });
 
   const app = await NestFactory.create<NestFastifyApplication>(

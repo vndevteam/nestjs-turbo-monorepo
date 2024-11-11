@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { REQUEST_ID_HEADER } from '@repo/nest-common';
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { REQUEST_ID_HEADER } from './fastify-pino.util';
 
 @Injectable()
 export class RequestIdMiddleware implements NestMiddleware {
