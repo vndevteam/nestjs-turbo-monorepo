@@ -2,6 +2,7 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   Post,
   SerializeOptions,
@@ -14,6 +15,8 @@ import { ProfileService } from './profile.service';
 @ApiTags('Profile')
 @Controller('profiles')
 export class ProfileController {
+  private readonly logger = new Logger(ProfileController.name);
+
   constructor(private readonly profileService: ProfileService) {}
 
   @Get(':username')

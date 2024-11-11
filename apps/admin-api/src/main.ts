@@ -3,7 +3,6 @@ import helmet from '@fastify/helmet';
 import {
   ClassSerializerInterceptor,
   HttpStatus,
-  INestApplication,
   RequestMethod,
   UnprocessableEntityException,
   ValidationError,
@@ -16,41 +15,50 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import {
+  AsyncContextProvider,
+  FastifyLoggerEnv,
+  FastifyPinoLogger,
+  fastifyPinoOptions,
+  genReqId,
+  REQUEST_ID_HEADER,
+} from '@repo/nest-common';
 import { AuthService } from './api/auth/auth.service';
 import { AppModule } from './app.module';
 import { AllConfigType } from './config/config.type';
 import { GlobalExceptionFilter } from './filters/global-exception.filter';
 import { AuthGuard } from './guards/auth.guard';
-
-function setupSwagger(app: INestApplication) {
-  const configService = app.get(ConfigService<AllConfigType>);
-  const appName = configService.getOrThrow('app.name', { infer: true });
-
-  const config = new DocumentBuilder()
-    .setTitle(appName)
-    .setDescription('RealWorld API')
-    .setVersion('1.0')
-    .setContact('Company Name', 'https://example.com', 'contact@company.com')
-    .addBearerAuth()
-    .addApiKey({ type: 'apiKey', name: 'Api-Key', in: 'header' }, 'Api-Key')
-    .addServer(
-      configService.getOrThrow('app.url', { infer: true }),
-      'Development',
-    )
-    .addServer('/', 'Local')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document, {
-    customSiteTitle: appName,
-  });
-}
+import { setupSwagger } from './utils/setup-swagger';
 
 async function bootstrap() {
+  const fastifyAdapter = new FastifyAdapter({
+    requestIdHeader: REQUEST_ID_HEADER,
+    genReqId: genReqId(),
+    logger: fastifyPinoOptions(process.env.NODE_ENV as FastifyLoggerEnv),
+  });
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    fastifyAdapter,
+    {
+      bufferLogs: true,
+    },
   );
+
+  // Configure the logger
+  const asyncContext = app.get(AsyncContextProvider);
+  const logger = new FastifyPinoLogger(
+    asyncContext,
+    fastifyAdapter.getInstance().log,
+  );
+  app.useLogger(logger);
+
+  fastifyAdapter.getInstance().addHook('onRequest', (request, reply, done) => {
+    asyncContext.run(() => {
+      asyncContext.set('log', request.log);
+      done();
+    }, new Map());
+  });
 
   // Setup security headers
   app.register(helmet);
@@ -61,24 +69,24 @@ async function bootstrap() {
   const configService = app.get(ConfigService<AllConfigType>);
   const reflector = app.get(Reflector);
 
+  // Enable CORS
   const corsOrigin = configService.getOrThrow('app.corsOrigin', {
     infer: true,
   });
-
   app.enableCors({
     origin: corsOrigin,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Accept',
     credentials: true,
   });
-  console.info('CORS Origin:', corsOrigin);
+  logger.log(`CORS Origin: ${corsOrigin.toString()}`);
 
   // Use global prefix if you don't have subdomain
   app.setGlobalPrefix(
     configService.getOrThrow('app.apiPrefix', { infer: true }),
     {
       exclude: [
-        { method: RequestMethod.GET, path: '/' },
+        // { method: RequestMethod.GET, path: '/' }, // Middeware not working when using exclude by root path https://github.com/nestjs/nest/issues/13401
         { method: RequestMethod.GET, path: 'health' },
       ],
     },
@@ -117,8 +125,6 @@ async function bootstrap() {
   }
 
   await app.listen(configService.getOrThrow('app.port', { infer: true }));
-
-  console.info(`Server running on ${await app.getUrl()}`);
 }
 
 bootstrap();

@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty, type ApiPropertyOptions } from '@nestjs/swagger';
-import { Constructor } from '@repo/common';
+import { Constructor } from '@repo/nest-common';
 import { Type } from 'class-transformer';
 import {
   IsBoolean,

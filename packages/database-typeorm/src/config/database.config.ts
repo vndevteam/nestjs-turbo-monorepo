@@ -1,5 +1,5 @@
 import { registerAs } from '@nestjs/config';
-import { validateConfig } from '@repo/common';
+import { validateConfig } from '@repo/nest-common';
 import {
   IsBoolean,
   IsInt,

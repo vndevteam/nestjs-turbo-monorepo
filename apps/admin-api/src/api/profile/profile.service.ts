@@ -1,5 +1,5 @@
 import { ErrorCode } from '@/constants/error-code.constant';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ValidationException } from '@repo/api';
 import { UserEntity } from '@repo/database-typeorm';
@@ -8,6 +8,8 @@ import { ProfileDto, ProfileResDto } from './dto/profile.dto';
 
 @Injectable()
 export class ProfileService {
+  private readonly logger = new Logger(ProfileService.name);
+
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,

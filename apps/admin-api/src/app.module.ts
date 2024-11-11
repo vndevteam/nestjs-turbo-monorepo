@@ -1,8 +1,13 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { appConfig, Environment } from '@repo/api';
 import { databaseConfig } from '@repo/database-typeorm';
+import {
+  AsyncContextProvider,
+  FastifyPinoLogger,
+  RequestIdMiddleware,
+} from '@repo/nest-common';
 import {
   AcceptLanguageResolver,
   HeaderResolver,
@@ -66,6 +71,11 @@ const i18nModule = I18nModule.forRootAsync({
 @Module({
   imports: [configModule, dbModule, i18nModule, ApiModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AsyncContextProvider, FastifyPinoLogger],
+  exports: [AsyncContextProvider],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestIdMiddleware).forRoutes('*');
+  }
+}
