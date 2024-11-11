@@ -1,5 +1,4 @@
-import { EmailField, StringField } from '@repo/api';
-import { lowerCaseTransformer } from '@repo/common';
+import { EmailField, lowerCaseTransformer, StringField } from '@repo/api';
 import { Transform } from 'class-transformer';
 import { IsUrl } from 'class-validator';
 

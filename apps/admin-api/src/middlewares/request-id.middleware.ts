@@ -1,5 +1,5 @@
-import { REQUEST_ID_HEADER } from '@/constants/app.constant';
 import { Injectable, NestMiddleware } from '@nestjs/common';
+import { REQUEST_ID_HEADER } from '@repo/nest-common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { ConsoleLogger, Injectable, Scope } from '@nestjs/common';
 import { type FastifyBaseLogger } from 'fastify';
-import { AsyncContextProvider } from '../../providers/async-context.provider';
+import { AsyncContextProvider } from './async-context.provider';
 
 @Injectable({ scope: Scope.TRANSIENT })
 export class FastifyPinoLogger extends ConsoleLogger {

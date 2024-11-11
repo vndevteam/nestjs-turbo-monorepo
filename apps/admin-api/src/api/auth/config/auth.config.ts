@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { IsMs } from '@repo/api';
-import { validateConfig } from '@repo/common';
+import { validateConfig } from '@repo/nest-common';
 import { IsNotEmpty, IsString } from 'class-validator';
 import { AuthConfig } from './auth-config.type';
 

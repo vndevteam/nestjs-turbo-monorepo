@@ -1,4 +1,4 @@
-import { hashPassword as hashPass } from '@repo/common';
+import { hashPassword as hashPass } from '@repo/nest-common';
 import {
   BeforeInsert,
   BeforeUpdate,

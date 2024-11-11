@@ -62,12 +62,12 @@ importers:
       '@repo/api':
         specifier: workspace:*
         version: link:../../packages/api
-      '@repo/common':
-        specifier: workspace:*
-        version: link:../../packages/common
       '@repo/database-typeorm':
         specifier: workspace:*
         version: link:../../packages/database-typeorm
+      '@repo/nest-common':
+        specifier: workspace:*
+        version: link:../../packages/nest-common
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -77,9 +77,6 @@ importers:
       fastify:
         specifier: ^4.28.1
         version: 4.28.1
-      hyperid:
-        specifier: ^3.3.0
-        version: 3.3.0
       ms:
         specifier: ^2.1.3
         version: 2.1.3
@@ -135,9 +132,6 @@ importers:
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.17.2)(ts-node@10.9.2(@swc/core@1.9.1(@swc/helpers@0.5.5))(@types/node@20.17.2)(typescript@5.6.3))
-      pino-pretty:
-        specifier: ^12.1.0
-        version: 12.1.0
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
@@ -220,9 +214,9 @@ importers:
       '@repo/api':
         specifier: workspace:*
         version: link:../../packages/api
-      '@repo/common':
+      '@repo/nest-common':
         specifier: workspace:*
-        version: link:../../packages/common
+        version: link:../../packages/nest-common
       class-validator:
         specifier: ^0.14.1
         version: 0.14.1
@@ -336,9 +330,9 @@ importers:
       '@nestjs/swagger':
         specifier: ^8.0.1
         version: 8.0.1(@fastify/static@7.0.4)(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.6)(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)
-      '@repo/common':
+      '@repo/nest-common':
         specifier: workspace:*
-        version: link:../common
+        version: link:../nest-common
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -380,52 +374,6 @@ importers:
         specifier: ^5.6.3
         version: 5.6.3
 
-  packages/common:
-    dependencies:
-      '@nestjs/common':
-        specifier: ^10.4.6
-        version: 10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
-      '@nestjs/mapped-types':
-        specifier: '*'
-        version: 2.0.5(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)
-      '@nestjs/swagger':
-        specifier: ^8.0.1
-        version: 8.0.1(@fastify/static@7.0.4)(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.6)(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)
-      argon2:
-        specifier: ^0.41.1
-        version: 0.41.1
-      class-transformer:
-        specifier: ^0.5.1
-        version: 0.5.1
-      class-validator:
-        specifier: ^0.14.1
-        version: 0.14.1
-      ms:
-        specifier: ^2.1.3
-        version: 2.1.3
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      '@types/ms':
-        specifier: ^0.7.34
-        version: 0.7.34
-      '@types/node':
-        specifier: ^20.17.2
-        version: 20.17.2
-      ts-loader:
-        specifier: ^9.4.3
-        version: 9.5.1(typescript@5.6.3)(webpack@5.94.0(@swc/core@1.9.1(@swc/helpers@0.5.5)))
-      ts-node:
-        specifier: ^10.9.1
-        version: 10.9.2(@swc/core@1.9.1(@swc/helpers@0.5.5))(@types/node@20.17.2)(typescript@5.6.3)
-      typescript:
-        specifier: ^5.6.3
-        version: 5.6.3
-
   packages/database-typeorm:
     dependencies:
       '@nestjs/config':
@@ -434,9 +382,9 @@ importers:
       '@nestjs/mapped-types':
         specifier: '*'
         version: 2.0.5(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)
-      '@repo/common':
+      '@repo/nest-common':
         specifier: workspace:*
-        version: link:../common
+        version: link:../nest-common
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -519,6 +467,61 @@ importers:
       typescript-eslint:
         specifier: ^8.12.2
         version: 8.12.2(eslint@9.13.0(jiti@2.3.3))(typescript@5.6.3)
+
+  packages/nest-common:
+    dependencies:
+      '@nestjs/common':
+        specifier: ^10.4.6
+        version: 10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/mapped-types':
+        specifier: '*'
+        version: 2.0.5(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)
+      '@nestjs/swagger':
+        specifier: ^8.0.1
+        version: 8.0.1(@fastify/static@7.0.4)(@nestjs/common@10.4.6(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.6)(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)
+      argon2:
+        specifier: ^0.41.1
+        version: 0.41.1
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
+      class-validator:
+        specifier: ^0.14.1
+        version: 0.14.1
+      fastify:
+        specifier: ^4.28.1
+        version: 4.28.1
+      hyperid:
+        specifier: ^3.3.0
+        version: 3.3.0
+      ms:
+        specifier: ^2.1.3
+        version: 2.1.3
+      pino:
+        specifier: ^9.5.0
+        version: 9.5.0
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/ms':
+        specifier: ^0.7.34
+        version: 0.7.34
+      '@types/node':
+        specifier: ^20.17.2
+        version: 20.17.2
+      ts-loader:
+        specifier: ^9.4.3
+        version: 9.5.1(typescript@5.6.3)(webpack@5.94.0(@swc/core@1.9.1(@swc/helpers@0.5.5)))
+      ts-node:
+        specifier: ^10.9.1
+        version: 10.9.2(@swc/core@1.9.1(@swc/helpers@0.5.5))(@types/node@20.17.2)(typescript@5.6.3)
+      typescript:
+        specifier: ^5.6.3
+        version: 5.6.3
 
   packages/typescript-config: {}
 
@@ -2912,9 +2915,6 @@ packages:
     resolution: {integrity: sha512-t/Ygsytq+R995EJ5PZlD4Cu56sWa8InXySaViRzw9apusqsOO2bQP+SbYzAhR0pFKoB+43lYy8rWban9JSuXnA==}
     engines: {node: '>= 0.4'}
 
-  dateformat@4.6.3:
-    resolution: {integrity: sha512-2P0p0pFGzHS5EMnhdxQi7aJN+iMheud0UhG4dlE1DLAlvL8JHjJJTX/CSm4JXwV0Ka5nGk3zC5mcb5bUQUxxMA==}
-
   dayjs@1.11.13:
     resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
@@ -3546,9 +3546,6 @@ packages:
   fast-content-type-parse@1.1.0:
     resolution: {integrity: sha512-fBHHqSTFLVnR61C+gltJuE5GkVQMV0S2nqUO8TJ+5Z3qAKG8vAx4FKai1s5jq/inV1+sREynIWSuQ6HgoSXpDQ==}
 
-  fast-copy@3.0.2:
-    resolution: {integrity: sha512-dl0O9Vhju8IrcLndv2eU4ldt1ftXMqqfgN4H1cpmGV7P6jeB9FwpN9a2c8DPGE1Ys88rNUJVYDHq73CGAGOPfQ==}
-
   fast-decode-uri-component@1.0.1:
     resolution: {integrity: sha512-WKgKWg5eUxvRZGwW8FvfbaH7AXSh2cL+3j5fMGzUMCxWBJ3dV3a7Wz8y2f/uQ0e3B6WmodD3oS54jTQ9HVTIIg==}
 
@@ -3947,9 +3944,6 @@ packages:
   helmet@7.2.0:
     resolution: {integrity: sha512-ZRiwvN089JfMXokizgqEPXsl2Guk094yExfoDXR0cBYWxtBbaSww/w+vT4WEJsBW2iTUi1GgZ6swmoug3Oy4Xw==}
     engines: {node: '>=16.0.0'}
-
-  help-me@5.0.0:
-    resolution: {integrity: sha512-7xgomUX6ADmcYzFik0HzAxh/73YlKR9bmFzf51CZwR+b6YtzU2m0u49hQCqV6SvlqIqsaxovfwdvbnsw3b/zpg==}
 
   hexoid@2.0.0:
     resolution: {integrity: sha512-qlspKUK7IlSQv2o+5I7yhUd7TxlOG2Vr5LTa3ve2XSNVKAL/n/u/7KLvKmFNimomDIKvZFXWHv0T12mv7rT8Aw==}
@@ -4480,10 +4474,6 @@ packages:
 
   jju@1.4.0:
     resolution: {integrity: sha512-8wb9Yw966OSxApiCt0K3yNJL8pnNeIv+OEq2YMidz4FKP6nonSRoOXc80iXY4JaN2FC11B9qsNmDsm+ZOfMROA==}
-
-  joycon@3.1.1:
-    resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
-    engines: {node: '>=10'}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -5488,10 +5478,6 @@ packages:
 
   pino-abstract-transport@2.0.0:
     resolution: {integrity: sha512-F63x5tizV6WCh4R6RHyi2Ml+M70DNRXt/+HANowMflpgGFMAym/VKm6G7ZOQRjqN7XbGxK1Lg9t6ZrtzOaivMw==}
-
-  pino-pretty@12.1.0:
-    resolution: {integrity: sha512-Z7JdCPqggoRyo0saJyCe1BN8At5qE+ZBElNbyx+znCaCVN+ohOqlWb+/WSYnamzfi2e6P6pXq/3H66KwFQHXWg==}
-    hasBin: true
 
   pino-std-serializers@7.0.0:
     resolution: {integrity: sha512-e906FRY0+tV27iq4juKzSYPbUj2do2X2JX4EzSca1631EB2QJQUqGbDuERal7LCtOpxl6x3+nvo9NPZcmjkiFA==}
@@ -9881,8 +9867,6 @@ snapshots:
       es-errors: 1.3.0
       is-data-view: 1.0.1
 
-  dateformat@4.6.3: {}
-
   dayjs@1.11.13: {}
 
   debug@2.6.9:
@@ -10738,8 +10722,6 @@ snapshots:
 
   fast-content-type-parse@1.1.0: {}
 
-  fast-copy@3.0.2: {}
-
   fast-decode-uri-component@1.0.1: {}
 
   fast-deep-equal@3.1.3: {}
@@ -11284,8 +11266,6 @@ snapshots:
       upper-case: 1.1.3
 
   helmet@7.2.0: {}
-
-  help-me@5.0.0: {}
 
   hexoid@2.0.0: {}
 
@@ -12005,8 +11985,6 @@ snapshots:
   jiti@2.3.3: {}
 
   jju@1.4.0: {}
-
-  joycon@3.1.1: {}
 
   js-tokens@4.0.0: {}
 
@@ -13357,23 +13335,6 @@ snapshots:
   pino-abstract-transport@2.0.0:
     dependencies:
       split2: 4.2.0
-
-  pino-pretty@12.1.0:
-    dependencies:
-      colorette: 2.0.20
-      dateformat: 4.6.3
-      fast-copy: 3.0.2
-      fast-safe-stringify: 2.1.1
-      help-me: 5.0.0
-      joycon: 3.1.1
-      minimist: 1.2.8
-      on-exit-leak-free: 2.1.2
-      pino-abstract-transport: 2.0.0
-      pump: 3.0.2
-      readable-stream: 4.5.2
-      secure-json-parse: 2.7.0
-      sonic-boom: 4.1.0
-      strip-json-comments: 3.1.1
 
   pino-std-serializers@7.0.0: {}
 

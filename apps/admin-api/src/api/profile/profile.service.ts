@@ -9,6 +9,7 @@ import { ProfileDto, ProfileResDto } from './dto/profile.dto';
 @Injectable()
 export class ProfileService {
   private readonly logger = new Logger(ProfileService.name);
+
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
@@ -51,14 +52,6 @@ export class ProfileService {
       where: { id: userId },
       relations: ['following'],
     });
-
-    // this.logger.log(
-    //   'service: this.logger ' +
-    //     getAddress(this.logger) +
-    //     ' : ' +
-    //     new Blob([JSON.stringify(this.logger)]).size,
-    // );
-    // this.logger.debug(user);
 
     if (!user) {
       throw new ValidationException(ErrorCode.E002);

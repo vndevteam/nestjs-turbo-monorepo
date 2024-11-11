@@ -5,7 +5,6 @@ import {
   Logger,
   Param,
   Post,
-  Req,
   SerializeOptions,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -17,6 +16,7 @@ import { ProfileService } from './profile.service';
 @Controller('profiles')
 export class ProfileController {
   private readonly logger = new Logger(ProfileController.name);
+
   constructor(private readonly profileService: ProfileService) {}
 
   @Get(':username')
@@ -32,23 +32,9 @@ export class ProfileController {
   @Post(':username/follow')
   @SerializeOptions({ type: ProfileResDto })
   follow(
-    @Req() req: any,
     @CurrentUser('id') userId: number,
     @Param('username') username: string,
   ): Promise<ProfileResDto> {
-    // this.logger.log(
-    //   'controller: this ' +
-    //     getAddress(req.log) +
-    //     ' : ' +
-    //     new Blob([JSON.stringify(req.log)]).size,
-    // );
-    // this.logger.log(
-    //   'controller: this.logger ' +
-    //     getAddress(this.logger) +
-    //     ' : ' +
-    //     new Blob([JSON.stringify(this.logger)]).size,
-    // );
-
     return this.profileService.follow(userId, username);
   }
 
