@@ -1,3 +1,2 @@
-export * from './fastify-pino-logger.module';
-export * from './fastify-pino-logger.service';
-export * from './fastify-pino-logger.util';
+export * from './fastify-pino.logger';
+export * from './fastify-pino.util';

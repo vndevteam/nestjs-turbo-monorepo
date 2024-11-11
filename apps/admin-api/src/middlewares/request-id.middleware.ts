@@ -6,7 +6,6 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 export class RequestIdMiddleware implements NestMiddleware {
   use(req: FastifyRequest, res: FastifyReply['raw'], next: () => void) {
     const requestId = req.id;
-    req.log.child({ reqId: requestId });
 
     if (requestId) {
       res.setHeader(REQUEST_ID_HEADER, requestId);

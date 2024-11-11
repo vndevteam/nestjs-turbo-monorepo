@@ -1,8 +1,10 @@
 import { FastifyLoggerOptions, PinoLoggerOptions } from 'fastify/types/logger';
-import { Environment } from 'src/constants';
+import { Environment } from '../../constants';
 
-const developmentLogger = () =>
-  ({
+type Env = Environment;
+
+const developmentLogger = (): any => {
+  return {
     messageKey: 'msg',
     transport: {
       target: 'pino-pretty',
@@ -16,19 +18,28 @@ const developmentLogger = () =>
       req: (req) => ({
         method: req.method,
         url: req.url,
-        id: req.id, // Bao gồm `reqId` trong log
+        id: req.id,
+        path: req.routeOptions.url,
+        parameters: req.params,
+        headers: req.headers,
       }),
+      res(reply) {
+        return {
+          statusCode: reply.statusCode,
+        };
+      },
     },
     customSuccessMessage,
-  }) as FastifyLoggerOptions & PinoLoggerOptions;
+  } as FastifyLoggerOptions & PinoLoggerOptions;
+};
 
 const customSuccessMessage = (req, res, responseTime: number) => {
   return `[${req.id || '*'}] "${req.method} ${req.url}" ${res.statusCode} - "${req.headers['host']}" "${req.headers['user-agent']}" - ${responseTime} ms`;
 };
 
-export function fastifyPinoLogger(env: Environment) {
+export function fastifyPinoOptions(env: Env) {
   const envToLogger = {
-    development: developmentLogger,
+    development: developmentLogger(),
     production: {
       level: 'info',
     },

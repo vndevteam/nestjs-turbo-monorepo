@@ -17,7 +17,8 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { FastifyPinoLoggerService } from '@repo/api';
+import { Environment, FastifyPinoLogger, fastifyPinoOptions } from '@repo/api';
+import { AsyncContextProvider } from '@repo/api/providers/async-context.provider';
 import hyperid from 'hyperid';
 import { AuthService } from './api/auth/auth.service';
 import { AppModule } from './app.module';
@@ -25,6 +26,16 @@ import { AllConfigType } from './config/config.type';
 import { REQUEST_ID_HEADER } from './constants/app.constant';
 import { GlobalExceptionFilter } from './filters/global-exception.filter';
 import { AuthGuard } from './guards/auth.guard';
+
+const addressMap = new WeakMap();
+let addressCounter = 0;
+
+export function getAddress(obj) {
+  if (!addressMap.has(obj)) {
+    addressMap.set(obj, `Address_${++addressCounter}`);
+  }
+  return addressMap.get(obj);
+}
 
 function setupSwagger(app: INestApplication) {
   const configService = app.get(ConfigService<AllConfigType>);
@@ -55,47 +66,8 @@ async function bootstrap() {
     genReqId: (req: any) => {
       return req.headers[REQUEST_ID_HEADER] || hyperid().uuid;
     },
-    logger: {
-      messageKey: 'msg',
-      transport: {
-        target: 'pino-pretty',
-        options: {
-          colorize: true,
-          singleLine: true,
-        },
-      },
-      level: 'debug',
-      serializers: {
-        res(reply) {
-          // The default
-          return {
-            statusCode: reply.statusCode,
-          };
-        },
-        req(request) {
-          return {
-            method: request.method,
-            url: request.url,
-            path: request.routeOptions.url,
-            parameters: request.params,
-            // Including the headers in the log could be in violation
-            // of privacy laws, e.g. GDPR. You should use the "redact" option to
-            // remove sensitive fields. It could also leak authentication data in
-            // the logs.
-            headers: request.headers,
-          };
-        },
-      },
-    },
-    childLoggerFactory: (logger, bindings, loggerOpts, req) => {
-      bindings.reqId = req['id'];
-      return logger.child(bindings, loggerOpts);
-    },
+    logger: fastifyPinoOptions(Environment[process.env.NODE_ENV.toUpperCase()]),
   });
-
-  const fastifyInstance = fastifyAdapter.getInstance();
-  const log = fastifyInstance.log;
-  const logger = new FastifyPinoLoggerService(log);
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
@@ -105,7 +77,21 @@ async function bootstrap() {
     },
   );
 
+  // Configure the logger service
+  const asyncContext = app.get(AsyncContextProvider);
+  const logger = new FastifyPinoLogger(
+    asyncContext,
+    fastifyAdapter.getInstance().log,
+  );
+
   app.useLogger(logger);
+
+  fastifyAdapter.getInstance().addHook('onRequest', (request, reply, done) => {
+    asyncContext.run(() => {
+      asyncContext.set('log', request.log);
+      done();
+    }, new Map());
+  });
 
   // Setup security headers
   app.register(helmet);

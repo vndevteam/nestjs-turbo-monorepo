@@ -52,7 +52,13 @@ export class ProfileService {
       relations: ['following'],
     });
 
-    this.logger.debug(user);
+    // this.logger.log(
+    //   'service: this.logger ' +
+    //     getAddress(this.logger) +
+    //     ' : ' +
+    //     new Blob([JSON.stringify(this.logger)]).size,
+    // );
+    // this.logger.debug(user);
 
     if (!user) {
       throw new ValidationException(ErrorCode.E002);
