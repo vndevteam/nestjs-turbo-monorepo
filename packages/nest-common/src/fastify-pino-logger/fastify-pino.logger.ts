@@ -1,17 +1,23 @@
 import { ConsoleLogger, Injectable, Scope } from '@nestjs/common';
 import { type FastifyBaseLogger } from 'fastify';
+import pino from 'pino';
 import { AsyncContextProvider } from './async-context.provider';
 
 @Injectable({ scope: Scope.TRANSIENT })
 export class FastifyPinoLogger extends ConsoleLogger {
   protected readonly contextName: string = 'context';
-  protected readonly errorKey: string = 'err';
+  private readonly messageKey: string;
+  private readonly errorKey: string;
 
   constructor(
     private readonly asyncContext: AsyncContextProvider,
     private readonly logger: FastifyBaseLogger,
   ) {
     super();
+    this.messageKey =
+      (this.logger as any)[pino.symbols.messageKeySym as any] || 'msg';
+    this.errorKey =
+      (this.logger as any)[pino.symbols.errorKeySym as any] || 'err';
   }
 
   private formatMsg(message: any) {
@@ -34,13 +40,13 @@ export class FastifyPinoLogger extends ConsoleLogger {
         : optionalParams;
 
     const logObject = {
-      msg: formattedMessage,
+      [this.messageKey]: formattedMessage,
       [this.contextName]: context,
       ...(extra && { extra }),
     } as Record<string, any>;
 
     if (message instanceof Error) {
-      logObject.msg = message.message;
+      logObject[this.messageKey] = message.message;
       logObject[this.errorKey] = message;
     }
 

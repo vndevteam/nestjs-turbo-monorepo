@@ -7,6 +7,8 @@ export type FastifyLoggerEnv = 'development' | 'staging' | 'production';
 
 const developmentLogger = (): any => {
   return {
+    messageKey: 'msg',
+    errorKey: 'err',
     transport: {
       target: 'pino-pretty',
       options: {
