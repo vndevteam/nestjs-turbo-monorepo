@@ -1,11 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ArticleEntity } from '@repo/database-typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ArticleService {
-  constructor() {}
+  constructor(
+    @InjectRepository(ArticleEntity)
+    private readonly articleRepository: Repository<ArticleEntity>,
+  ) {}
 
   async list() {
-    throw new Error('Method not implemented.');
+    this.articleRepository.find();
   }
 
   async feed() {

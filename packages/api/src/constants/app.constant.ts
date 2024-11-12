@@ -14,3 +14,11 @@ export enum LogService {
   GOOGLE_LOGGING = 'google_logging',
   AWS_CLOUDWATCH = 'aws_cloudwatch',
 }
+
+export enum Order {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+
+export const DEFAULT_PAGE_LIMIT = 10;
+export const DEFAULT_CURRENT_PAGE = 1;
