@@ -4,6 +4,9 @@ import { AsyncContextProvider } from './async-context.provider';
 
 @Injectable({ scope: Scope.TRANSIENT })
 export class FastifyPinoLogger extends ConsoleLogger {
+  protected readonly contextName: string = 'context';
+  protected readonly errorKey: string = 'err';
+
   constructor(
     private readonly asyncContext: AsyncContextProvider,
     private readonly logger: FastifyBaseLogger,
@@ -11,54 +14,123 @@ export class FastifyPinoLogger extends ConsoleLogger {
     super();
   }
 
-  log(message: string) {
-    const requestLogger =
-      this.asyncContext.get<FastifyBaseLogger>('log') || this.logger;
-    if (requestLogger) {
-      requestLogger.info(message);
-    } else {
-      super.log(message);
-    }
+  private formatMsg(message: any) {
+    return typeof message === 'string' ? message : JSON.stringify(message);
   }
 
-  error(message: string, trace?: string) {
-    const requestLogger =
-      this.asyncContext.get<FastifyBaseLogger>('log') || this.logger;
-    if (requestLogger) {
-      requestLogger.error({ trace }, message);
-    } else {
-      super.error(message, trace);
+  private logWithErrLevel(
+    level: 'info' | 'warn' | 'debug' | 'trace' | 'error' | 'fatal',
+    message: any,
+    context?: string,
+    ...optionalParams: any[]
+  ) {
+    const reqLogger = this.getRequestLogger();
+    const formattedMessage = this.formatMsg(message);
+
+    const extra =
+      optionalParams.length === 0 ||
+      optionalParams.every((param) => param == null)
+        ? undefined
+        : optionalParams;
+
+    const logObject = {
+      msg: formattedMessage,
+      [this.contextName]: context,
+      ...(extra && { extra }),
+    } as Record<string, any>;
+
+    if (message instanceof Error) {
+      logObject.msg = message.message;
+      logObject[this.errorKey] = message;
     }
+
+    reqLogger[level](logObject);
   }
 
-  warn(message: string) {
-    const requestLogger =
-      this.asyncContext.get<FastifyBaseLogger>('log') || this.logger;
-    if (requestLogger) {
-      requestLogger.warn(message);
-    } else {
-      super.warn(message);
-    }
+  private logMessage(
+    level: 'info' | 'warn' | 'debug' | 'trace' | 'error' | 'fatal',
+    message: any,
+    contextOrParams?: string | any,
+    ...optionalParams: any[]
+  ) {
+    const context =
+      typeof contextOrParams === 'string' ? contextOrParams : undefined;
+    const additionalParams = context
+      ? optionalParams
+      : [contextOrParams, ...optionalParams];
+    this.logWithErrLevel(level, message, context, ...additionalParams);
   }
 
-  debug(message: string) {
-    const requestLogger =
-      this.asyncContext.get<FastifyBaseLogger>('log') || this.logger;
-
-    if (requestLogger) {
-      requestLogger.debug(message);
-    } else {
-      super.debug(message);
-    }
+  log(message: any, context?: string): void;
+  log(message: any, ...optionalParams: [...any, string?]): void;
+  log(
+    message: any,
+    contextOrParams?: string | any,
+    ...optionalParams: any[]
+  ): void {
+    this.logMessage('info', message, contextOrParams, ...optionalParams);
   }
 
-  verbose(message: string) {
-    const requestLogger =
-      this.asyncContext.get<FastifyBaseLogger>('log') || this.logger;
-    if (requestLogger) {
-      requestLogger.trace(message);
-    } else {
-      super.verbose(message);
-    }
+  error(message: any, stackOrContext?: string, context?: string): void;
+  error(message: any, stack?: string, context?: string): void;
+  error(message: any, ...optionalParams: [...any, string?, string?]): void;
+  error(
+    message: any,
+    stackOrContext?: string | any,
+    contextOrParams?: string | any,
+    ...optionalParams: any[]
+  ): void {
+    const stack =
+      typeof stackOrContext === 'string' ? stackOrContext : undefined;
+    const context =
+      typeof contextOrParams === 'string' ? contextOrParams : undefined;
+    const additionalParams = context
+      ? optionalParams
+      : [contextOrParams, ...optionalParams];
+    this.logWithErrLevel('error', message, context, stack, ...additionalParams);
+  }
+
+  warn(message: any, context?: string): void;
+  warn(message: any, ...optionalParams: [...any, string?]): void;
+  warn(
+    message: any,
+    contextOrParams?: string | any,
+    ...optionalParams: any[]
+  ): void {
+    this.logMessage('warn', message, contextOrParams, ...optionalParams);
+  }
+
+  debug(message: any, context?: string): void;
+  debug(message: any, ...optionalParams: [...any, string?]): void;
+  debug(
+    message: any,
+    contextOrParams?: string | any,
+    ...optionalParams: any[]
+  ): void {
+    this.logMessage('debug', message, contextOrParams, ...optionalParams);
+  }
+
+  verbose(message: any, context?: string): void;
+  verbose(message: any, ...optionalParams: [...any, string?]): void;
+  verbose(
+    message: any,
+    contextOrParams?: string | any,
+    ...optionalParams: any[]
+  ): void {
+    this.logMessage('trace', message, contextOrParams, ...optionalParams);
+  }
+
+  fatal(message: any, context?: string): void;
+  fatal(message: any, ...optionalParams: [...any, string?]): void;
+  fatal(
+    message: any,
+    contextOrParams?: string | any,
+    ...optionalParams: any[]
+  ): void {
+    this.logMessage('fatal', message, contextOrParams, ...optionalParams);
+  }
+
+  private getRequestLogger(): FastifyBaseLogger {
+    return this.asyncContext.get<FastifyBaseLogger>('log') || this.logger;
   }
 }

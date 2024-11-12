@@ -7,7 +7,6 @@ export type FastifyLoggerEnv = 'development' | 'staging' | 'production';
 
 const developmentLogger = (): any => {
   return {
-    messageKey: 'msg',
     transport: {
       target: 'pino-pretty',
       options: {
@@ -34,6 +33,17 @@ const developmentLogger = (): any => {
     customSuccessMessage,
     customReceivedMessage,
     customErrorMessage,
+    redact: {
+      paths: [
+        'req.headers.authorization',
+        'req.body.token',
+        'req.body.refreshToken',
+        'req.body.email',
+        'req.body.password',
+        'req.body.oldPassword',
+      ],
+      censor: '**GDPR COMPLIANT**',
+    },
   } as FastifyLoggerOptions & PinoLoggerOptions;
 };
 
@@ -55,11 +65,11 @@ export function genReqId() {
 
 export function fastifyPinoOptions(
   env: FastifyLoggerEnv,
-): FastifyLoggerOptions | boolean {
+): (FastifyLoggerOptions & PinoLoggerOptions) | boolean {
   const envToLogger = {
     development: developmentLogger(),
     production: {
-      level: 'info',
+      level: 'debug',
     },
     staging: {
       level: 'info',
