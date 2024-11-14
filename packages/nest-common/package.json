@@ -28,9 +28,9 @@
     }
   },
   "dependencies": {
-    "@nestjs/common": "^10.4.6",
+    "@nestjs/common": "^10.4.7",
     "@nestjs/mapped-types": "*",
-    "@nestjs/swagger": "^8.0.1",
+    "@nestjs/swagger": "^8.0.5",
     "argon2": "^0.41.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
@@ -44,8 +44,8 @@
     "@repo/typescript-config": "workspace:*",
     "@types/ms": "^0.7.34",
     "@types/node": "^20.17.2",
-    "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.1",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
   }
 }
