@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 
 @Entity('tag')
@@ -7,5 +7,6 @@ export class TagEntity extends AbstractEntity {
   id!: number;
 
   @Column()
+  @Index('UQ_tag_name', ['name'], { unique: true })
   name!: string;
 }

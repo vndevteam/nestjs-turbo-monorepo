@@ -110,7 +110,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         }
       : {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: this.i18n.t('common.error.internal_server_error'),
+          message: this.i18n.t('app.common.internal_server_error'),
         };
     const errorRes = {
       timestamp: new Date().toISOString(),

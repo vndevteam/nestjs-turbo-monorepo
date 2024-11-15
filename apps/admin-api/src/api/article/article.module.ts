@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ArticleEntity } from '@repo/database-typeorm';
+import { ArticleEntity, TagEntity } from '@repo/database-typeorm';
 import { ArticleController } from './article.controller';
 import { ArticleService } from './article.service';
 import { CommentModule } from './comment/comment.module';
@@ -12,7 +12,7 @@ import { FavoriteModule } from './favorite/favorite.module';
   imports: [
     CommentModule,
     FavoriteModule,
-    TypeOrmModule.forFeature([ArticleEntity]),
+    TypeOrmModule.forFeature([ArticleEntity, TagEntity]),
   ],
 })
 export class ArticleModule {}

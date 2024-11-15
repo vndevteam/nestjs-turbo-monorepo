@@ -3,6 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ValidationException } from '@repo/api';
 import { UserEntity } from '@repo/database-typeorm';
+import { UserFollowsEntity } from '@repo/database-typeorm/entities/user-follows.entity';
 import { Repository } from 'typeorm';
 import { ProfileDto, ProfileResDto } from './dto/profile.dto';
 
@@ -13,6 +14,8 @@ export class ProfileService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(UserFollowsEntity)
+    private readonly userFollowRepository: Repository<UserFollowsEntity>,
   ) {}
 
   async getProfile(userId: number, username: string): Promise<ProfileResDto> {
@@ -32,12 +35,22 @@ export class ProfileService {
 
     // Check if the user is following the target user
     if (userId && userId !== targetProfile.id) {
-      const follows = await this.userRepository.findOne({
-        where: { id: userId, following: { id: targetProfile.id } },
+      const follows = await this.userRepository.find({
+        select: {
+          id: true,
+          following: {
+            id: true,
+            followeeId: true,
+          },
+        },
+        where: {
+          id: userId,
+          following: { followeeId: targetProfile.id },
+        },
         relations: ['following'],
       });
 
-      profile.following = !!follows;
+      profile.following = !!follows[0];
     }
 
     return {
@@ -47,42 +60,51 @@ export class ProfileService {
 
   async follow(userId: number, username: string): Promise<ProfileResDto> {
     // Find the user who wants to follow
-    const user = await this.userRepository.findOne({
-      select: ['id', 'username'],
-      where: { id: userId },
-      relations: ['following'],
+    // And check if the user is already following the target user
+    const [user] = await this.userRepository.find({
+      select: {
+        id: true,
+        username: true,
+        following: {
+          id: true,
+          followee: {
+            username: true,
+          },
+        },
+      },
+      where: { id: userId, following: { followee: { username: username } } },
+      relations: {
+        following: {
+          followee: true,
+        },
+      },
     });
 
-    if (!user) {
-      throw new ValidationException(ErrorCode.E002);
-    }
-
-    // Check if the user is already following the target user
-    const isAlreadyFollowing = user.following.some(
-      (followingUser) => followingUser.username === username,
-    );
-
-    if (isAlreadyFollowing) {
+    if (user && user.following.length > 0) {
       throw new ValidationException(ErrorCode.E103);
     }
 
     // Find the user to follow
-    const followUser = await this.userRepository.findOne({
+    const followingUser = await this.userRepository.findOne({
       where: { username },
     });
 
-    if (!followUser) {
+    if (!followingUser) {
       throw new ValidationException(ErrorCode.E101);
     }
 
     // Add the user to follow to the following list
-    user.following.push(followUser);
-    await this.userRepository.save(user);
+    const userFollows = new UserFollowsEntity({
+      followerId: userId,
+      followeeId: followingUser.id,
+    });
+
+    await this.userFollowRepository.save(userFollows);
 
     const profile: ProfileDto = {
-      username: followUser.username,
-      bio: followUser.bio,
-      image: followUser.image,
+      username: followingUser.username,
+      bio: followingUser.bio,
+      image: followingUser.image,
       following: true,
     };
 
@@ -95,7 +117,6 @@ export class ProfileService {
     // Find the user who wants to unfollow
     const user = await this.userRepository.findOne({
       where: { id: userId },
-      relations: ['following'],
     });
 
     if (!user) {
@@ -111,12 +132,16 @@ export class ProfileService {
       throw new ValidationException(ErrorCode.E101);
     }
 
-    // Remove the user to unfollow from the following list
-    user.following = user.following.filter(
-      (followingUser) => followingUser.id !== followUser.id,
-    );
+    // Find relationship between the user and the user to unfollow
+    const userFollow = await this.userFollowRepository.findOne({
+      where: { followerId: userId, followeeId: followUser.id },
+    });
 
-    await this.userRepository.save(user);
+    if (!userFollow) {
+      throw new ValidationException(ErrorCode.E104);
+    }
+
+    await this.userFollowRepository.delete(userFollow.id);
 
     const profile: ProfileDto = {
       username: followUser.username,

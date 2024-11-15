@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { DEFAULT_PAGE_LIMIT, Order } from '../../constants';
 import { PageOptionsDto } from './page-options.dto';
 
 export class OffsetPaginationDto {
@@ -9,15 +10,15 @@ export class OffsetPaginationDto {
 
   @ApiProperty()
   @Expose()
-  readonly currentPage: number;
+  readonly offset: number;
 
   @ApiProperty()
   @Expose()
-  readonly nextPage?: number;
+  readonly nextOffset?: number;
 
   @ApiProperty()
   @Expose()
-  readonly previousPage?: number;
+  readonly previousOffset?: number;
 
   @ApiProperty()
   @Expose()
@@ -27,16 +28,23 @@ export class OffsetPaginationDto {
   @Expose()
   readonly totalPages: number;
 
-  constructor(totalRecords: number, pageOptions: PageOptionsDto) {
+  constructor(
+    totalRecords: number,
+    pageOptions: PageOptionsDto = {
+      limit: DEFAULT_PAGE_LIMIT,
+      offset: 0,
+      order: Order.ASC,
+    },
+  ) {
     this.limit = pageOptions.limit;
-    this.currentPage = pageOptions.offset / pageOptions.limit + 1;
-    this.nextPage =
-      this.currentPage < this.totalPages ? this.currentPage + 1 : undefined;
-    this.previousPage =
-      this.currentPage > 1 && this.currentPage - 1 < this.totalPages
-        ? this.currentPage - 1
-        : undefined;
+    this.offset = pageOptions.offset;
     this.totalRecords = totalRecords;
+    this.nextOffset =
+      this.offset + this.limit < totalRecords
+        ? this.offset + this.limit
+        : undefined;
+    this.previousOffset =
+      this.offset - this.limit >= 0 ? this.offset - this.limit : undefined;
     this.totalPages =
       this.limit > 0 ? Math.ceil(totalRecords / pageOptions.limit) : 0;
   }

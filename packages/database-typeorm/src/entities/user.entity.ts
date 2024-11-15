@@ -13,6 +13,7 @@ import {
 } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { ArticleEntity } from './article.entity';
+import { UserFollowsEntity } from './user-follows.entity';
 
 @Entity('user')
 export class UserEntity extends AbstractEntity {
@@ -47,7 +48,7 @@ export class UserEntity extends AbstractEntity {
   @OneToMany(() => ArticleEntity, (article) => article.author)
   articles: Relation<ArticleEntity[]>;
 
-  @ManyToMany(() => ArticleEntity)
+  @ManyToMany(() => ArticleEntity, (article) => article.favoritedBy)
   @JoinTable({
     name: 'user_favorites',
     joinColumn: {
@@ -63,22 +64,9 @@ export class UserEntity extends AbstractEntity {
   })
   favorites: Relation<ArticleEntity[]>;
 
-  @ManyToMany(() => UserEntity, (user) => user.followers)
-  @JoinTable({
-    name: 'user_follows',
-    joinColumn: {
-      name: 'follower_id',
-      referencedColumnName: 'id',
-      foreignKeyConstraintName: 'FK_user_follows_follower',
-    },
-    inverseJoinColumn: {
-      name: 'following_id',
-      referencedColumnName: 'id',
-      foreignKeyConstraintName: 'FK_user_follows_following',
-    },
-  })
-  following: Relation<UserEntity[]>;
+  @OneToMany(() => UserFollowsEntity, (userFollow) => userFollow.follower)
+  following: Relation<UserFollowsEntity[]>;
 
-  @ManyToMany(() => UserEntity, (user) => user.following)
-  followers: Relation<UserEntity[]>;
+  @OneToMany(() => UserFollowsEntity, (userFollow) => userFollow.followee)
+  followers: Relation<UserFollowsEntity[]>;
 }

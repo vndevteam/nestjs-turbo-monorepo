@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   JoinTable,
   ManyToMany,
@@ -18,10 +19,16 @@ import { UserEntity } from './user.entity';
 
 @Entity('article')
 export class ArticleEntity extends AbstractEntity {
+  constructor(data?: Partial<ArticleEntity>) {
+    super();
+    Object.assign(this, data);
+  }
+
   @PrimaryGeneratedColumn({ primaryKeyConstraintName: 'PK_article_id' })
   id!: number;
 
   @Column()
+  @Index('UQ_article_slug', ['slug'], { unique: true })
   slug!: string;
 
   @Column()
@@ -78,4 +85,7 @@ export class ArticleEntity extends AbstractEntity {
 
   @OneToMany(() => CommentEntity, (comment) => comment.article)
   comments: Relation<CommentEntity[]>;
+
+  @ManyToMany(() => UserEntity, (user) => user.favorites)
+  favoritedBy: Relation<UserEntity[]>;
 }
