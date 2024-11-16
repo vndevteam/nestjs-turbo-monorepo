@@ -11,9 +11,15 @@ export class CreateTagTable1730193511880 implements MigrationInterface {
                 CONSTRAINT "PK_tag_id" PRIMARY KEY ("id")
             )
         `);
+    await queryRunner.query(`
+            CREATE UNIQUE INDEX "UQ_tag_name" ON "tag" ("name")
+        `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
+            DROP INDEX "public"."UQ_tag_name"
+        `);
     await queryRunner.query(`
             DROP TABLE "tag"
         `);

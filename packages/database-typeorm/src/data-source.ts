@@ -16,7 +16,10 @@ export const dataSource = new DataSource({
   dropSchema: false,
   keepConnectionAlive: true,
   logging: process.env.NODE_ENV !== 'production',
-  entities: [__dirname + '/dist/**/*.entity{.js}'],
+  entities: [
+    __dirname + '/dist/**/*.entity{.js}', // this configuration is for typeorm-extension seeder
+    __dirname + '/entities/**/*.entity{.ts,.js}', // this configuration is for tyeporm migration
+  ],
   migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
   migrationsTableName: 'migrations',
   poolSize: process.env.DATABASE_MAX_CONNECTIONS

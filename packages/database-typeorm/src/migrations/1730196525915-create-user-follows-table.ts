@@ -6,39 +6,46 @@ export class CreateUserFollowsTable1730196525915 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
             CREATE TABLE "user_follows" (
+                "id" SERIAL NOT NULL,
                 "follower_id" integer NOT NULL,
-                "following_id" integer NOT NULL,
-                CONSTRAINT "PK_abc657d7ff1282910784b819171" PRIMARY KEY ("follower_id", "following_id")
+                "followee_id" integer NOT NULL,
+                CONSTRAINT "PK_user_follows_id" PRIMARY KEY ("id")
             )
         `);
     await queryRunner.query(`
-            CREATE INDEX "IDX_f7af3bf8f2dcba61b4adc10823" ON "user_follows" ("follower_id")
+            CREATE INDEX "UQ_user_follows_follower_id" ON "user_follows" ("follower_id")
         `);
     await queryRunner.query(`
-            CREATE INDEX "IDX_5a71643cec3110af425f92e76e" ON "user_follows" ("following_id")
+            CREATE INDEX "UQ_user_follows_followee_id" ON "user_follows" ("followee_id")
+        `);
+    await queryRunner.query(`
+            CREATE UNIQUE INDEX "UQ_user_follows_follower_id_followee_id" ON "user_follows" ("follower_id", "followee_id")
         `);
     await queryRunner.query(`
             ALTER TABLE "user_follows"
-            ADD CONSTRAINT "FK_user_follows_follower" FOREIGN KEY ("follower_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE
+            ADD CONSTRAINT "FK_user_follows_follower_id" FOREIGN KEY ("follower_id") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
     await queryRunner.query(`
             ALTER TABLE "user_follows"
-            ADD CONSTRAINT "FK_user_follows_following" FOREIGN KEY ("following_id") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_user_follows_followee_id" FOREIGN KEY ("followee_id") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-            ALTER TABLE "user_follows" DROP CONSTRAINT "FK_user_follows_following"
+            ALTER TABLE "user_follows" DROP CONSTRAINT "FK_user_follows_followee_id"
         `);
     await queryRunner.query(`
-            ALTER TABLE "user_follows" DROP CONSTRAINT "FK_user_follows_follower"
+            ALTER TABLE "user_follows" DROP CONSTRAINT "FK_user_follows_follower_id"
         `);
     await queryRunner.query(`
-            DROP INDEX "IDX_5a71643cec3110af425f92e76e"
+            DROP INDEX "UQ_user_follows_follower_id_followee_id"
         `);
     await queryRunner.query(`
-            DROP INDEX "IDX_f7af3bf8f2dcba61b4adc10823"
+            DROP INDEX "UQ_user_follows_followee_id"
+        `);
+    await queryRunner.query(`
+            DROP INDEX "UQ_user_follows_follower_id"
         `);
     await queryRunner.query(`
             DROP TABLE "user_follows"

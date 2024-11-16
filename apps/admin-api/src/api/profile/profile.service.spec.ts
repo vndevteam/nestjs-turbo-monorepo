@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { UserEntity } from '@repo/database-typeorm';
+import { UserFollowsEntity } from '@repo/database-typeorm/entities/user-follows.entity';
 import { Repository } from 'typeorm';
 import { ProfileService } from './profile.service';
 
@@ -8,6 +9,9 @@ describe('ProfileService', () => {
   let service: ProfileService;
   let userRepositoryValue: Partial<
     Record<keyof Repository<UserEntity>, jest.Mock>
+  >;
+  let userFollowsRepositoryValue: Partial<
+    Record<keyof Repository<UserFollowsEntity>, jest.Mock>
   >;
 
   beforeEach(async () => {
@@ -17,6 +21,10 @@ describe('ProfileService', () => {
         {
           provide: getRepositoryToken(UserEntity),
           useValue: userRepositoryValue,
+        },
+        {
+          provide: getRepositoryToken(UserFollowsEntity),
+          useValue: userFollowsRepositoryValue,
         },
       ],
     }).compile();

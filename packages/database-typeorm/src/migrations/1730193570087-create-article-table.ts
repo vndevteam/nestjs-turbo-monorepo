@@ -18,12 +18,18 @@ export class CreateArticleTable1730193570087 implements MigrationInterface {
             )
         `);
     await queryRunner.query(`
+            CREATE UNIQUE INDEX "UQ_article_slug" ON "article" ("slug")
+        `);
+    await queryRunner.query(`
             ALTER TABLE "article"
             ADD CONSTRAINT "FK_article_user" FOREIGN KEY ("author_id") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
+            DROP INDEX "public"."UQ_article_slug"
+        `);
     await queryRunner.query(`
             ALTER TABLE "article" DROP CONSTRAINT "FK_article_user"
         `);
