@@ -9,7 +9,7 @@ import {
   Query,
   SerializeOptions,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@repo/api';
 import { ApiAuth } from '@repo/api/decorators/http.decorators';
 import { ArticleService } from './article.service';
@@ -48,6 +48,19 @@ export class ArticleController {
   @ApiAuth({
     summary: 'Create Article',
     type: ArticleResDto,
+  })
+  @ApiBody({
+    description: 'Article create request',
+    schema: {
+      type: 'object',
+      properties: {
+        article: {
+          type: 'object',
+          $ref: '#/components/schemas/CreateArticleReqDto',
+        },
+      },
+      required: ['article'],
+    },
   })
   async create(
     @CurrentUser('id') userId: number,
