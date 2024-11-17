@@ -14,7 +14,7 @@ describe('ProfileService', () => {
     Record<keyof Repository<UserFollowsEntity>, jest.Mock>
   >;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ProfileService,
