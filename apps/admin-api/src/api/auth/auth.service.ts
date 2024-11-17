@@ -7,7 +7,7 @@ import { UserEntity } from '@repo/database-typeorm';
 import { verifyPassword } from '@repo/nest-common';
 import { Repository } from 'typeorm';
 import { UserResDto } from '../user/dto/user.dto';
-import { LoginDto } from './dto/login.dto';
+import { LoginReqDto } from './dto/login.dto';
 import { JwtPayloadType } from './types/jwt-payload.type';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class AuthService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async login(dto: LoginDto): Promise<UserResDto> {
+  async login(dto: LoginReqDto): Promise<UserResDto> {
     const { email, password } = dto;
 
     const user = await this.userRepository.findOne({

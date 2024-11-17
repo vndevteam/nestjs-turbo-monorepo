@@ -8,7 +8,8 @@ import {
   SerializeOptions,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { AuthOptional, CurrentUser } from '@repo/api';
+import { CurrentUser } from '@repo/api';
+import { ApiAuth } from '@repo/api/decorators/http.decorators';
 import { ProfileResDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
 
@@ -20,8 +21,12 @@ export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @Get(':username')
-  @AuthOptional()
   @SerializeOptions({ type: ProfileResDto })
+  @ApiAuth({
+    summary: 'Get Profile',
+    type: ProfileResDto,
+    isAuthOptional: true,
+  })
   getProfile(
     @CurrentUser('id') userId: number,
     @Param('username') username: string,
@@ -31,6 +36,10 @@ export class ProfileController {
 
   @Post(':username/follow')
   @SerializeOptions({ type: ProfileResDto })
+  @ApiAuth({
+    summary: 'Follow User',
+    type: ProfileResDto,
+  })
   follow(
     @CurrentUser('id') userId: number,
     @Param('username') username: string,
@@ -40,6 +49,10 @@ export class ProfileController {
 
   @Delete(':username/follow')
   @SerializeOptions({ type: ProfileResDto })
+  @ApiAuth({
+    summary: 'Unfollow User',
+    type: ProfileResDto,
+  })
   unfollow(
     @CurrentUser('id') userId: number,
     @Param('username') username: string,

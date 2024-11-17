@@ -1,6 +1,6 @@
 import { EmailField, PasswordField } from '@repo/api';
 
-export class LoginDto {
+export class LoginReqDto {
   @EmailField()
   readonly email: string;
 

@@ -6,8 +6,9 @@ import {
   Put,
   SerializeOptions,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { CurrentUser, Public } from '@repo/api';
+import { ApiBody, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { CurrentUser } from '@repo/api';
+import { ApiAuth, ApiPublic } from '@repo/api/decorators/http.decorators';
 import { CreateUserReqDto } from './dto/create-user.dto';
 import { UpdateUserReqDto } from './dto/update-user.dto';
 import { UserResDto } from './dto/user.dto';
@@ -20,6 +21,10 @@ export class UserController {
 
   @Get('user')
   @SerializeOptions({ type: UserResDto })
+  @ApiAuth({
+    summary: 'Get Current User',
+    type: UserResDto,
+  })
   getCurrent(
     @CurrentUser() currentUser: { id: number; token: string },
   ): Promise<UserResDto> {
@@ -27,7 +32,23 @@ export class UserController {
   }
 
   @Post('users')
-  @Public()
+  @ApiPublic({
+    type: UserResDto,
+    summary: 'Registration',
+  })
+  @ApiBody({
+    description: 'User register request',
+    schema: {
+      type: 'object',
+      properties: {
+        user: {
+          type: 'object',
+          $ref: getSchemaPath(CreateUserReqDto),
+        },
+      },
+      required: ['user'],
+    },
+  })
   @SerializeOptions({ type: UserResDto })
   async create(@Body('user') userData: CreateUserReqDto): Promise<UserResDto> {
     return this.userService.create(userData);
@@ -35,6 +56,23 @@ export class UserController {
 
   @Put('user')
   @SerializeOptions({ type: UserResDto })
+  @ApiAuth({
+    summary: 'Update User',
+    type: UserResDto,
+  })
+  @ApiBody({
+    description: 'User update request',
+    schema: {
+      type: 'object',
+      properties: {
+        user: {
+          type: 'object',
+          $ref: getSchemaPath(UpdateUserReqDto),
+        },
+      },
+      required: ['user'],
+    },
+  })
   async update(
     @CurrentUser('id') userId: number,
     @Body('user') userData: UpdateUserReqDto,

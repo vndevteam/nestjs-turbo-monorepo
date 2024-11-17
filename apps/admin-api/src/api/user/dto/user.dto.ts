@@ -1,24 +1,23 @@
-import { Expose, Type } from 'class-transformer';
+import { ClassField, EmailField, StringField } from '@repo/api';
 
 export class UserDto {
-  @Expose()
+  @EmailField({ expose: true })
   email: string;
 
-  @Expose()
+  @StringField({ expose: true })
   token: string;
 
-  @Expose()
+  @StringField({ expose: true })
   username: string;
 
-  @Expose()
+  @StringField({ expose: true })
   bio: string;
 
-  @Expose()
+  @StringField({ expose: true })
   image: string;
 }
 
 export class UserResDto {
-  @Expose()
-  @Type(() => UserDto)
+  @ClassField(() => UserDto, { expose: true })
   user: UserDto;
 }
