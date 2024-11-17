@@ -6,7 +6,7 @@ describe('ProfileController', () => {
   let controller: ProfileController;
   let profileServiceValue: Partial<Record<keyof ProfileService, jest.Mock>>;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     profileServiceValue = {
       getProfile: jest.fn(),
       follow: jest.fn(),

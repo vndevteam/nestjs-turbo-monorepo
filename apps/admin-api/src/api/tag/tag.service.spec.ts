@@ -1,12 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { TagEntity } from '@repo/database-typeorm';
+import { Repository } from 'typeorm';
 import { TagService } from './tag.service';
 
 describe('TagService', () => {
   let service: TagService;
+  let tagRepositoryValue: Partial<
+    Record<keyof Repository<TagEntity>, jest.Mock>
+  >;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [TagService],
+      providers: [
+        TagService,
+        {
+          provide: getRepositoryToken(TagEntity),
+          useValue: tagRepositoryValue,
+        },
+      ],
     }).compile();
 
     service = module.get<TagService>(TagService);
