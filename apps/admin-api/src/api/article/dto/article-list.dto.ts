@@ -1,8 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { NumberFieldOptional, StringFieldOptional } from '@repo/api';
+import {
+  ClassField,
+  NumberField,
+  NumberFieldOptional,
+  StringFieldOptional,
+} from '@repo/api';
 import { OffsetPaginationDto } from '@repo/api/dto/offset-pagination/offset-pagination.dto';
 import { PageOptionsDto } from '@repo/api/dto/offset-pagination/page-options.dto';
-import { Expose, Type } from 'class-transformer';
 import { ArticleDto } from './article.dto';
 
 export class ArticleListReqDto extends PageOptionsDto {
@@ -31,17 +34,12 @@ export class ArticleListReqDto extends PageOptionsDto {
 }
 
 export class ArticleListResDto {
-  @ApiProperty({ type: [ArticleDto] })
-  @Expose()
-  @Type(() => ArticleDto)
+  @ClassField(() => ArticleDto, { isArray: true, expose: true })
   articles: ArticleDto[];
 
-  @ApiProperty()
-  @Expose()
+  @NumberField({ expose: true })
   articlesCount: number;
 
-  @ApiProperty({ type: OffsetPaginationDto })
-  @Expose()
-  @Type(() => OffsetPaginationDto)
+  @ClassField(() => OffsetPaginationDto, { expose: true })
   pagination: OffsetPaginationDto;
 }

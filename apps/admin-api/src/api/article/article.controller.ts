@@ -9,8 +9,9 @@ import {
   Query,
   SerializeOptions,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { AuthOptional, CurrentUser } from '@repo/api';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { CurrentUser } from '@repo/api';
+import { ApiAuth } from '@repo/api/decorators/http.decorators';
 import { ArticleService } from './article.service';
 import { ArticleListReqDto, ArticleListResDto } from './dto/article-list.dto';
 import { ArticleResDto } from './dto/article.dto';
@@ -22,8 +23,12 @@ export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Get()
-  @AuthOptional()
   @SerializeOptions({ type: ArticleListResDto })
+  @ApiAuth({
+    summary: 'List Articles',
+    type: ArticleListResDto,
+    isAuthOptional: true,
+  })
   async list(@Query() reqDto: ArticleListReqDto): Promise<ArticleListResDto> {
     return await this.articleService.list(reqDto);
   }
@@ -40,6 +45,23 @@ export class ArticleController {
 
   @Post()
   @SerializeOptions({ type: ArticleResDto })
+  @ApiAuth({
+    summary: 'Create Article',
+    type: ArticleResDto,
+  })
+  @ApiBody({
+    description: 'Article create request',
+    schema: {
+      type: 'object',
+      properties: {
+        article: {
+          type: 'object',
+          $ref: '#/components/schemas/CreateArticleReqDto',
+        },
+      },
+      required: ['article'],
+    },
+  })
   async create(
     @CurrentUser('id') userId: number,
     @Body('article') articleData: CreateArticleReqDto,

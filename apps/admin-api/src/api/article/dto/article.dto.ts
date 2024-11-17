@@ -1,41 +1,47 @@
 import { ProfileDto } from '@/api/profile/dto/profile.dto';
-import { Expose, Type } from 'class-transformer';
+import {
+  BooleanFieldOptional,
+  ClassField,
+  ClassFieldOptional,
+  DateFieldOptional,
+  NumberFieldOptional,
+  StringField,
+  StringFieldOptional,
+} from '@repo/api';
 
 export class ArticleDto {
-  @Expose()
+  @StringFieldOptional({ expose: true })
   slug?: string;
 
-  @Expose()
+  @StringField({ expose: true })
   title: string;
 
-  @Expose()
+  @StringField({ expose: true })
   description: string;
 
-  @Expose()
+  @StringField({ expose: true })
   body: string;
 
-  @Expose()
+  @StringField({ each: true, expose: true })
   tagList: string[];
 
-  @Expose()
+  @DateFieldOptional({ expose: true })
   createdAt?: Date;
 
-  @Expose()
+  @DateFieldOptional({ expose: true })
   updatedAt?: Date;
 
-  @Expose()
+  @BooleanFieldOptional({ expose: true })
   favorited?: boolean;
 
-  @Expose()
+  @NumberFieldOptional({ expose: true })
   favoritesCount?: number;
 
-  @Expose()
-  @Type(() => ProfileDto)
+  @ClassFieldOptional(() => ProfileDto, { expose: true })
   author?: ProfileDto;
 }
 
 export class ArticleResDto {
-  @Expose()
-  @Type(() => ArticleDto)
+  @ClassField(() => ArticleDto, { expose: true })
   article: ArticleDto;
 }

@@ -1,3 +1,7 @@
+import { CreateArticleReqDto } from '@/api/article/dto/create-article.dto';
+import { LoginReqDto } from '@/api/auth/dto/login.dto';
+import { CreateUserReqDto } from '@/api/user/dto/create-user.dto';
+import { UpdateUserReqDto } from '@/api/user/dto/update-user.dto';
 import { AllConfigType } from '@/config/config.type';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -20,7 +24,15 @@ export function setupSwagger(app: INestApplication) {
     )
     .addServer('/', 'Local')
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config, {
+    extraModels: [
+      // Use this to add models that are not directly referenced in the controllers (Ex: @Body('user') userData: LoginReqDto in the controller)
+      LoginReqDto,
+      CreateUserReqDto,
+      UpdateUserReqDto,
+      CreateArticleReqDto,
+    ],
+  });
   SwaggerModule.setup('api-docs', app, document, {
     customSiteTitle: appName,
   });

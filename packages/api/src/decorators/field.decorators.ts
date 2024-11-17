@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiProperty, type ApiPropertyOptions } from '@nestjs/swagger';
 import { Constructor } from '@repo/nest-common';
-import { Type } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
@@ -32,6 +32,8 @@ interface IFieldOptions {
   swagger?: boolean;
   nullable?: boolean;
   groups?: string[];
+  expose?: boolean;
+  exclude?: boolean;
 }
 
 interface INumberFieldOptions extends IFieldOptions {
@@ -69,6 +71,9 @@ export function NumberField(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+    delete restOptions.expose;
+    delete restOptions.exclude;
+    delete restOptions.swagger;
     decorators.push(
       ApiProperty({ type: Number, required: !!required, ...restOptions }),
     );
@@ -90,6 +95,14 @@ export function NumberField(
 
   if (options.isPositive) {
     decorators.push(IsPositive({ each: options.each }));
+  }
+
+  if (options.expose) {
+    decorators.push(Expose());
+  }
+
+  if (options.exclude) {
+    decorators.push(Exclude());
   }
 
   return applyDecorators(...decorators);
@@ -118,6 +131,9 @@ export function StringField(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+    delete restOptions.expose;
+    delete restOptions.exclude;
+    delete restOptions.swagger;
     decorators.push(
       ApiProperty({
         type: String,
@@ -144,6 +160,14 @@ export function StringField(
     decorators.push(ToUpperCase());
   }
 
+  if (options.expose) {
+    decorators.push(Expose());
+  }
+
+  if (options.exclude) {
+    decorators.push(Exclude());
+  }
+
   return applyDecorators(...decorators);
 }
 
@@ -160,6 +184,9 @@ export function TokenField(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+    delete restOptions.expose;
+    delete restOptions.exclude;
+    delete restOptions.swagger;
     decorators.push(
       ApiProperty({
         type: String,
@@ -168,6 +195,14 @@ export function TokenField(
         isArray: options.each,
       }),
     );
+  }
+
+  if (options.expose) {
+    decorators.push(Expose());
+  }
+
+  if (options.exclude) {
+    decorators.push(Exclude());
   }
 
   return applyDecorators(...decorators);
@@ -193,6 +228,14 @@ export function PasswordField(
     decorators.push(IsNullable());
   } else {
     decorators.push(NotEquals(null));
+  }
+
+  if (options.expose) {
+    decorators.push(Expose());
+  }
+
+  if (options.exclude) {
+    decorators.push(Exclude());
   }
 
   return applyDecorators(...decorators);
@@ -221,9 +264,20 @@ export function BooleanField(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+    delete restOptions.expose;
+    delete restOptions.exclude;
+    delete restOptions.swagger;
     decorators.push(
       ApiProperty({ type: Boolean, required: !!required, ...restOptions }),
     );
+  }
+
+  if (options.expose) {
+    decorators.push(Expose());
+  }
+
+  if (options.exclude) {
+    decorators.push(Exclude());
   }
 
   return applyDecorators(...decorators);
@@ -255,9 +309,20 @@ export function EmailField(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+    delete restOptions.expose;
+    delete restOptions.exclude;
+    delete restOptions.swagger;
     decorators.push(
       ApiProperty({ type: String, required: !!required, ...restOptions }),
     );
+  }
+
+  if (options.expose) {
+    decorators.push(Expose());
+  }
+
+  if (options.exclude) {
+    decorators.push(Exclude());
   }
 
   return applyDecorators(...decorators);
@@ -286,6 +351,9 @@ export function UUIDField(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+    delete restOptions.expose;
+    delete restOptions.exclude;
+    delete restOptions.swagger;
     decorators.push(
       ApiProperty({
         type: options.each ? [String] : String,
@@ -295,6 +363,14 @@ export function UUIDField(
         ...restOptions,
       }),
     );
+  }
+
+  if (options.expose) {
+    decorators.push(Expose());
+  }
+
+  if (options.exclude) {
+    decorators.push(Exclude());
   }
 
   return applyDecorators(...decorators);
@@ -319,6 +395,14 @@ export function URLField(
     decorators.push(IsNullable({ each: options.each }));
   } else {
     decorators.push(NotEquals(null, { each: options.each }));
+  }
+
+  if (options.expose) {
+    decorators.push(Expose());
+  }
+
+  if (options.exclude) {
+    decorators.push(Exclude());
   }
 
   return applyDecorators(...decorators);
@@ -346,9 +430,20 @@ export function DateField(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+    delete restOptions.expose;
+    delete restOptions.exclude;
+    delete restOptions.swagger;
     decorators.push(
       ApiProperty({ type: Date, required: !!required, ...restOptions }),
     );
+  }
+
+  if (options.expose) {
+    decorators.push(Expose());
+  }
+
+  if (options.exclude) {
+    decorators.push(Exclude());
   }
 
   return applyDecorators(...decorators);
@@ -378,6 +473,9 @@ export function EnumField<TEnum extends object>(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+    delete restOptions.expose;
+    delete restOptions.exclude;
+    delete restOptions.swagger;
     decorators.push(
       ApiProperty({
         enum: getEnum(),
@@ -387,6 +485,14 @@ export function EnumField<TEnum extends object>(
         ...restOptions,
       }),
     );
+  }
+
+  if (options.expose) {
+    decorators.push(Expose());
+  }
+
+  if (options.exclude) {
+    decorators.push(Exclude());
   }
 
   return applyDecorators(...decorators);
@@ -424,6 +530,9 @@ export function ClassField<TClass extends Constructor>(
 
   if (options.swagger !== false) {
     const { required = true, ...restOptions } = options;
+    delete restOptions.expose;
+    delete restOptions.exclude;
+    delete restOptions.swagger;
     decorators.push(
       ApiProperty({
         type: () => getClass(),
@@ -431,6 +540,14 @@ export function ClassField<TClass extends Constructor>(
         ...restOptions,
       }),
     );
+  }
+
+  if (options.expose) {
+    decorators.push(Expose());
+  }
+
+  if (options.exclude) {
+    decorators.push(Exclude());
   }
 
   return applyDecorators(...decorators);

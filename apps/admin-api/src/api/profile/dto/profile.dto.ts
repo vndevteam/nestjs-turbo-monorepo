@@ -1,21 +1,20 @@
-import { Expose, Type } from 'class-transformer';
+import { ClassField, StringField } from '@repo/api';
 
 export class ProfileDto {
-  @Expose()
+  @StringField({ expose: true })
   username: string;
 
-  @Expose()
+  @StringField({ expose: true })
   bio: string;
 
-  @Expose()
+  @StringField({ expose: true })
   image: string;
 
-  @Expose()
+  @StringField({ expose: true })
   following: boolean;
 }
 
 export class ProfileResDto {
-  @Expose()
-  @Type(() => ProfileDto)
+  @ClassField(() => ProfileDto, { expose: true })
   profile: ProfileDto;
 }
