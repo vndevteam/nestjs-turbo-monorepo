@@ -29,5 +29,9 @@
   },
   "article": {
     "not_found": "Article not found"
+  },
+  "comment": {
+    "not_found": "comment not found",
+    "not_authorized_to_delete": "You are not authorized to delete this comment"
   }
 }

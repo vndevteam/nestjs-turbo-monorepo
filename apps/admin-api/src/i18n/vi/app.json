@@ -29,5 +29,9 @@
   },
   "article": {
     "not_found": "Bài viết không tìm thấy"
+  },
+  "comment": {
+    "not_found": "Bình luận không tìm thấy",
+    "not_authorized_to_delete": "Bạn không được phép xóa bình luận này"
   }
 }

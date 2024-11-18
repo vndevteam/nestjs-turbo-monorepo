@@ -25,7 +25,7 @@ export class CreateUserFavoritesTable1730196400597
         `);
     await queryRunner.query(`
             ALTER TABLE "user_favorites"
-            ADD CONSTRAINT "FK_user_favorites_article" FOREIGN KEY ("article_id") REFERENCES "article"("id") ON DELETE CASCADE ON UPDATE CASCADE
+            ADD CONSTRAINT "FK_user_favorites_article" FOREIGN KEY ("article_id") REFERENCES "article"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
   }
 

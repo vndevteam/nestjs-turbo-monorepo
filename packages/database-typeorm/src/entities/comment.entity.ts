@@ -4,7 +4,6 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -14,6 +13,11 @@ import { UserEntity } from './user.entity';
 
 @Entity('comment')
 export class CommentEntity extends AbstractEntity {
+  constructor(data?: Partial<CommentEntity>) {
+    super();
+    Object.assign(this, data);
+  }
+
   @PrimaryGeneratedColumn({ primaryKeyConstraintName: 'PK_comment_id' })
   id!: number;
 
@@ -34,7 +38,7 @@ export class CommentEntity extends AbstractEntity {
   @Column({ name: 'author_id' })
   authorId!: number;
 
-  @OneToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, (user) => user.comments)
   @JoinColumn({
     name: 'author_id',
     referencedColumnName: 'id',

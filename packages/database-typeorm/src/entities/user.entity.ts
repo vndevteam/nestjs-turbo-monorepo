@@ -13,6 +13,7 @@ import {
 } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { ArticleEntity } from './article.entity';
+import { CommentEntity } from './comment.entity';
 import { UserFollowsEntity } from './user-follows.entity';
 
 @Entity('user')
@@ -47,6 +48,9 @@ export class UserEntity extends AbstractEntity {
 
   @OneToMany(() => ArticleEntity, (article) => article.author)
   articles: Relation<ArticleEntity[]>;
+
+  @OneToMany(() => CommentEntity, (comment) => comment.author)
+  comments: Relation<CommentEntity[]>;
 
   @ManyToMany(() => ArticleEntity, (article) => article.favoritedBy)
   @JoinTable({
