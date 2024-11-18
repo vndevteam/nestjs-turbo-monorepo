@@ -31,8 +31,11 @@ export class ArticleController {
     type: ArticleListResDto,
     isAuthOptional: true,
   })
-  async list(@Query() reqDto: ArticleListReqDto): Promise<ArticleListResDto> {
-    return await this.articleService.list(reqDto);
+  async list(
+    @CurrentUser('id') userId: number,
+    @Query() reqDto: ArticleListReqDto,
+  ): Promise<ArticleListResDto> {
+    return await this.articleService.list(reqDto, userId);
   }
 
   @Get('feed')

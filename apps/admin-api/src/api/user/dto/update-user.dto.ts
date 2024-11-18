@@ -1,19 +1,23 @@
-import { EmailField, lowerCaseTransformer, StringField } from '@repo/api';
+import {
+  EmailFieldOptional,
+  lowerCaseTransformer,
+  StringFieldOptional,
+} from '@repo/api';
 import { Transform } from 'class-transformer';
 import { IsUrl } from 'class-validator';
 
 export class UpdateUserReqDto {
-  @StringField()
+  @StringFieldOptional()
   @Transform(lowerCaseTransformer)
   readonly username: string;
 
-  @EmailField()
+  @EmailFieldOptional()
   readonly email: string;
 
-  @StringField()
+  @StringFieldOptional({ minLength: 0 })
   readonly bio: string;
 
-  @StringField()
+  @StringFieldOptional({ minLength: 0 })
   @IsUrl()
   readonly image: string;
 }

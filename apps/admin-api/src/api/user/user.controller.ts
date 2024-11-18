@@ -61,7 +61,7 @@ export class UserController {
     type: UserResDto,
   })
   @ApiBody({
-    description: 'User update request',
+    description: 'User details to update. At least **one** field is required.',
     schema: {
       type: 'object',
       properties: {

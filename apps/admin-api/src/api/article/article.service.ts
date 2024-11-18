@@ -6,9 +6,10 @@ import { ArticleEntity, TagEntity, UserEntity } from '@repo/database-typeorm';
 import { I18nService } from 'nestjs-i18n';
 import slugify from 'slugify';
 import { In, Repository } from 'typeorm';
+import { toArticleDto } from './article.util';
 import { ArticleFeedReqDto } from './dto/article-feed.dto';
 import { ArticleListReqDto, ArticleListResDto } from './dto/article-list.dto';
-import { ArticleDto, ArticleResDto } from './dto/article.dto';
+import { ArticleResDto } from './dto/article.dto';
 import { CreateArticleReqDto } from './dto/create-article.dto';
 import { UpdateArticleReqDto } from './dto/update-article.dto';
 
@@ -25,7 +26,15 @@ export class ArticleService {
     private readonly i18n: I18nService,
   ) {}
 
-  async list(reqDto: ArticleListReqDto): Promise<ArticleListResDto> {
+  async list(
+    reqDto: ArticleListReqDto,
+    userId: number,
+  ): Promise<ArticleListResDto> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['following'],
+    });
+
     const qb = this.articleRepository
       .createQueryBuilder('article')
       .leftJoinAndSelect('article.author', 'author')
@@ -55,12 +64,9 @@ export class ArticleService {
       takeAll: false,
     });
 
-    const articleDtos = articles.map((article) => {
-      const articleDto = article.toDto(ArticleDto);
-      delete articleDto.body;
-      articleDto.tagList = article.tags.map((tag) => tag.name);
-      return articleDto;
-    });
+    const articleDtos = articles.map((article) =>
+      toArticleDto(article, user, ['body']),
+    );
 
     return {
       articles: articleDtos,
@@ -105,6 +111,7 @@ export class ArticleService {
       .createQueryBuilder('article')
       .leftJoinAndSelect('article.author', 'author')
       .leftJoinAndSelect('article.tags', 'tags')
+      .leftJoinAndSelect('article.favoritedBy', 'favoritedBy')
       .where('article.authorId <> :userId', { userId })
       .andWhere('article.authorId IN (:...followeeIds)', {
         followeeIds,
@@ -116,12 +123,9 @@ export class ArticleService {
       takeAll: false,
     });
 
-    const articleDtos = articles.map((article) => {
-      const articleDto = article.toDto(ArticleDto);
-      delete articleDto.body;
-      articleDto.tagList = article.tags.map((tag) => tag.name);
-      return articleDto;
-    });
+    const articleDtos = articles.map((article) =>
+      toArticleDto(article, userWithFollowing, ['body']),
+    );
 
     return {
       articles: articleDtos,
@@ -131,6 +135,11 @@ export class ArticleService {
   }
 
   async get(userId: number, slug: string): Promise<ArticleResDto> {
+    const user = await this.userRepository.findOneOrFail({
+      where: { id: userId },
+      relations: ['following'],
+    });
+
     const article = await this.articleRepository.findOne({
       where: { slug: slug },
       relations: ['author', 'tags', 'favoritedBy'],
@@ -142,7 +151,7 @@ export class ArticleService {
 
     return {
       article: {
-        ...article.toDto(ArticleDto),
+        ...toArticleDto(article, user),
         tagList: article.tags.map((tag) => tag.name),
         favorited: article.favoritedBy.some((user) => user.id === userId),
         favoritesCount: article.favoritedBy.length,
@@ -191,7 +200,10 @@ export class ArticleService {
     await this.articleRepository.delete({ slug: slug });
   }
 
-  async update(reqSlug: string, articleData: UpdateArticleReqDto) {
+  async update(
+    reqSlug: string,
+    articleData: UpdateArticleReqDto,
+  ): Promise<ArticleResDto> {
     const article = await this.articleRepository.findOne({
       where: { slug: reqSlug },
     });
