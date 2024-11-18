@@ -1,13 +1,16 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { ErrorCode } from '@/constants/error-code.constant';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from '@repo/api/utils/offset-pagination';
-import { ArticleEntity, TagEntity } from '@repo/database-typeorm';
+import { ArticleEntity, TagEntity, UserEntity } from '@repo/database-typeorm';
+import { I18nService } from 'nestjs-i18n';
 import slugify from 'slugify';
 import { In, Repository } from 'typeorm';
 import { ArticleFeedReqDto } from './dto/article-feed.dto';
 import { ArticleListReqDto, ArticleListResDto } from './dto/article-list.dto';
 import { ArticleDto, ArticleResDto } from './dto/article.dto';
 import { CreateArticleReqDto } from './dto/create-article.dto';
+import { UpdateArticleReqDto } from './dto/update-article.dto';
 
 @Injectable()
 export class ArticleService {
@@ -17,6 +20,9 @@ export class ArticleService {
     private readonly articleRepository: Repository<ArticleEntity>,
     @InjectRepository(TagEntity)
     private readonly tagRepository: Repository<TagEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+    private readonly i18n: I18nService,
   ) {}
 
   async list(reqDto: ArticleListReqDto): Promise<ArticleListResDto> {
@@ -29,7 +35,7 @@ export class ArticleService {
     qb.where('1 = 1');
 
     if (reqDto.tag) {
-      qb.where('tags.name LIKE :tag', { tag: `%${reqDto.tag}%` });
+      qb.andWhere('tags.name LIKE :tag', { tag: `%${reqDto.tag}%` });
     }
 
     if (reqDto.author) {
@@ -63,17 +69,47 @@ export class ArticleService {
     };
   }
 
-  async feed(
+  async getFeed(
     userId: number,
     reqDto: ArticleFeedReqDto,
   ): Promise<ArticleListResDto> {
+    const userWithFollowing = await this.userRepository.findOne({
+      select: {
+        id: true,
+        following: {
+          id: true,
+          followeeId: true,
+        },
+      },
+      where: { id: userId },
+      relations: ['following'],
+    });
+
+    const followeeIds =
+      userWithFollowing?.following?.map((f) => f.followeeId) || [];
+
+    if (!followeeIds.length) {
+      return {
+        articles: [],
+        articlesCount: 0,
+        pagination: {
+          limit: 0,
+          offset: 0,
+          totalRecords: 0,
+          totalPages: 0,
+        },
+      };
+    }
+
     const qb = this.articleRepository
       .createQueryBuilder('article')
-      .leftJoinAndSelect('article.author', 'author');
-
-    qb.where('1 = 1');
-
-    qb.orderBy('article.createdAt', 'DESC');
+      .leftJoinAndSelect('article.author', 'author')
+      .leftJoinAndSelect('article.tags', 'tags')
+      .where('article.authorId <> :userId', { userId })
+      .andWhere('article.authorId IN (:...followeeIds)', {
+        followeeIds,
+      })
+      .orderBy('article.createdAt', 'DESC');
 
     const [articles, metaDto] = await paginate<ArticleEntity>(qb, reqDto, {
       skipCount: false,
@@ -94,8 +130,24 @@ export class ArticleService {
     };
   }
 
-  async get(_slug: string) {
-    throw new Error('Method not implemented.');
+  async get(userId: number, slug: string): Promise<ArticleResDto> {
+    const article = await this.articleRepository.findOne({
+      where: { slug: slug },
+      relations: ['author', 'tags', 'favoritedBy'],
+    });
+
+    if (!article) {
+      throw new NotFoundException(this.i18n.t(ErrorCode.E201));
+    }
+
+    return {
+      article: {
+        ...article.toDto(ArticleDto),
+        tagList: article.tags.map((tag) => tag.name),
+        favorited: article.favoritedBy.some((user) => user.id === userId),
+        favoritesCount: article.favoritedBy.length,
+      },
+    };
   }
 
   async create(
@@ -135,16 +187,58 @@ export class ArticleService {
     };
   }
 
-  async delete(_slug: string) {
-    throw new Error('Method not implemented.');
+  async delete(slug: string) {
+    await this.articleRepository.delete({ slug: slug });
   }
 
-  async update(_slug: string) {
-    throw new Error('Method not implemented.');
+  async update(reqSlug: string, articleData: UpdateArticleReqDto) {
+    const article = await this.articleRepository.findOne({
+      where: { slug: reqSlug },
+    });
+
+    if (!article) {
+      throw new NotFoundException(this.i18n.t(ErrorCode.E201));
+    }
+
+    const { title, description, body, tagList } = articleData;
+    const newSlug =
+      reqSlug !== this.generateSlug(title)
+        ? await this.validateAndCreateSlug(title)
+        : reqSlug;
+    const { existingTags, newTags } = await this.prepareTags(tagList);
+
+    let savedArticle: ArticleEntity;
+    await this.articleRepository.manager.transaction(async (manager) => {
+      // Save new tags
+      const savedNewTags = await manager.save(newTags);
+      const allTags = [...existingTags, ...savedNewTags];
+
+      // Save article
+      const updatedArticle = Object.assign(article, {
+        title,
+        slug: newSlug,
+        description,
+        body,
+        tags: allTags,
+      });
+
+      savedArticle = await manager.save(updatedArticle);
+    });
+
+    return {
+      article: {
+        slug: savedArticle.slug,
+        title: savedArticle.title,
+        description: savedArticle.description,
+        body: savedArticle.body,
+        tagList: savedArticle.tags.map((tag) => tag.name),
+      },
+    };
   }
 
   private async validateAndCreateSlug(title: string) {
-    const slug = slugify(title);
+    const slug = this.generateSlug(title);
+
     const existingArticle = await this.articleRepository.findOne({
       where: { slug },
     });
@@ -154,6 +248,13 @@ export class ArticleService {
     }
 
     return slug;
+  }
+
+  private generateSlug(title: string) {
+    return slugify(title, {
+      lower: true,
+      strict: true,
+    });
   }
 
   private async prepareTags(tagList: string[]) {

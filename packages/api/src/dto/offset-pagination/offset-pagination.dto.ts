@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { DEFAULT_PAGE_LIMIT, Order } from '../../constants';
+import { DEFAULT_CURRENT_OFFSET, DEFAULT_PAGE_LIMIT } from '../../constants';
 import { PageOptionsDto } from './page-options.dto';
 
 export class OffsetPaginationDto {
@@ -30,10 +30,9 @@ export class OffsetPaginationDto {
 
   constructor(
     totalRecords: number,
-    pageOptions: PageOptionsDto = {
+    pageOptions: Pick<PageOptionsDto, 'limit' | 'offset'> = {
       limit: DEFAULT_PAGE_LIMIT,
-      offset: 0,
-      order: Order.ASC,
+      offset: DEFAULT_CURRENT_OFFSET,
     },
   ) {
     this.limit = pageOptions.limit;

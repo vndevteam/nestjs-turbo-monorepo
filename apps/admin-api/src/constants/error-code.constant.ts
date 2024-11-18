@@ -13,4 +13,5 @@ export enum ErrorCode {
   E102 = 'app.profile.following_self',
   E103 = 'app.profile.already_followed',
   E104 = 'app.profile.not_followed',
+  E201 = 'app.article.not_found',
 }

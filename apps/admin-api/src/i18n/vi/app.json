@@ -26,5 +26,8 @@
     "following_self": "Bạn không thể theo dõi chính mình",
     "already_followed": "Đã theo dõi người dùng này",
     "not_followed": "Không theo dõi người dùng này"
+  },
+  "article": {
+    "not_found": "Bài viết không tìm thấy"
   }
 }

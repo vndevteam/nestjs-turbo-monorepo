@@ -4,7 +4,7 @@ import { PageOptionsDto } from '../dto/offset-pagination/page-options.dto';
 
 export async function paginate<T>(
   builder: SelectQueryBuilder<T>,
-  pageOptionsDto: PageOptionsDto,
+  pageOptionsDto: Pick<PageOptionsDto, 'limit' | 'offset'>,
   options?: Partial<{
     skipCount: boolean;
     takeAll: boolean;

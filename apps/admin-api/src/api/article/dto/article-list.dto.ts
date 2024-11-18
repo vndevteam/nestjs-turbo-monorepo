@@ -1,3 +1,4 @@
+import { OmitType } from '@nestjs/swagger';
 import {
   ClassField,
   NumberField,
@@ -8,7 +9,10 @@ import { OffsetPaginationDto } from '@repo/api/dto/offset-pagination/offset-pagi
 import { PageOptionsDto } from '@repo/api/dto/offset-pagination/page-options.dto';
 import { ArticleDto } from './article.dto';
 
-export class ArticleListReqDto extends PageOptionsDto {
+export class ArticleListReqDto extends OmitType(PageOptionsDto, [
+  'order',
+  'q',
+] as const) {
   @StringFieldOptional({ minLength: 0 })
   readonly tag?: string;
 
