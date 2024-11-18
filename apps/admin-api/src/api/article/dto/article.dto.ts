@@ -6,12 +6,11 @@ import {
   DateFieldOptional,
   NumberFieldOptional,
   StringField,
-  StringFieldOptional,
 } from '@repo/api';
 
 export class ArticleDto {
-  @StringFieldOptional({ expose: true })
-  slug?: string;
+  @StringField({ expose: true })
+  slug: string;
 
   @StringField({ expose: true })
   title: string;
