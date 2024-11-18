@@ -14,4 +14,6 @@ export enum ErrorCode {
   E103 = 'app.profile.already_followed',
   E104 = 'app.profile.not_followed',
   E201 = 'app.article.not_found',
+  E301 = 'app.comment.not_found',
+  E302 = 'app.comment.not_authorized_to_delete',
 }

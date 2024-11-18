@@ -12,7 +12,6 @@ export class CreateCommentTable1730198033817 implements MigrationInterface {
                 "author_id" integer NOT NULL,
                 "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
                 "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-                CONSTRAINT "REL_3ce66469b26697baa097f8da92" UNIQUE ("author_id"),
                 CONSTRAINT "PK_comment_id" PRIMARY KEY ("id")
             )
         `);

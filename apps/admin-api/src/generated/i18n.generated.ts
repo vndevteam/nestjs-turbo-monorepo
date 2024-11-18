@@ -36,6 +36,10 @@ export type I18nTranslations = {
         "article": {
             "not_found": string;
         };
+        "comment": {
+            "not_found": string;
+            "not_authorized_to_delete": string;
+        };
     };
 };
 /* prettier-ignore */
