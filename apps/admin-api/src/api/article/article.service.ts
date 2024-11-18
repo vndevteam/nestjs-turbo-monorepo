@@ -4,6 +4,7 @@ import { paginate } from '@repo/api/utils/offset-pagination';
 import { ArticleEntity, TagEntity } from '@repo/database-typeorm';
 import slugify from 'slugify';
 import { In, Repository } from 'typeorm';
+import { ArticleFeedReqDto } from './dto/article-feed.dto';
 import { ArticleListReqDto, ArticleListResDto } from './dto/article-list.dto';
 import { ArticleDto, ArticleResDto } from './dto/article.dto';
 import { CreateArticleReqDto } from './dto/create-article.dto';
@@ -62,8 +63,35 @@ export class ArticleService {
     };
   }
 
-  async feed() {
-    throw new Error('Method not implemented.');
+  async feed(
+    userId: number,
+    reqDto: ArticleFeedReqDto,
+  ): Promise<ArticleListResDto> {
+    const qb = this.articleRepository
+      .createQueryBuilder('article')
+      .leftJoinAndSelect('article.author', 'author');
+
+    qb.where('1 = 1');
+
+    qb.orderBy('article.createdAt', 'DESC');
+
+    const [articles, metaDto] = await paginate<ArticleEntity>(qb, reqDto, {
+      skipCount: false,
+      takeAll: false,
+    });
+
+    const articleDtos = articles.map((article) => {
+      const articleDto = article.toDto(ArticleDto);
+      delete articleDto.body;
+      articleDto.tagList = article.tags.map((tag) => tag.name);
+      return articleDto;
+    });
+
+    return {
+      articles: articleDtos,
+      articlesCount: metaDto.totalRecords,
+      pagination: metaDto,
+    };
   }
 
   async get(_slug: string) {
@@ -98,6 +126,7 @@ export class ArticleService {
 
     return {
       article: {
+        slug: savedArticle.slug,
         title: savedArticle.title,
         description: savedArticle.description,
         body: savedArticle.body,

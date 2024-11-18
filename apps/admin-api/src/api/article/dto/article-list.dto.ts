@@ -9,13 +9,13 @@ import { PageOptionsDto } from '@repo/api/dto/offset-pagination/page-options.dto
 import { ArticleDto } from './article.dto';
 
 export class ArticleListReqDto extends PageOptionsDto {
-  @StringFieldOptional()
+  @StringFieldOptional({ minLength: 0 })
   readonly tag?: string;
 
-  @StringFieldOptional()
+  @StringFieldOptional({ minLength: 0 })
   readonly author?: string;
 
-  @StringFieldOptional()
+  @StringFieldOptional({ minLength: 0 })
   readonly favorited?: string;
 
   @NumberFieldOptional({

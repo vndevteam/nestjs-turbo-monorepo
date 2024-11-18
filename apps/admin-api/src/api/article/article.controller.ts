@@ -13,6 +13,7 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '@repo/api';
 import { ApiAuth } from '@repo/api/decorators/http.decorators';
 import { ArticleService } from './article.service';
+import { ArticleFeedReqDto } from './dto/article-feed.dto';
 import { ArticleListReqDto, ArticleListResDto } from './dto/article-list.dto';
 import { ArticleResDto } from './dto/article.dto';
 import { CreateArticleReqDto } from './dto/create-article.dto';
@@ -34,8 +35,11 @@ export class ArticleController {
   }
 
   @Get('feed')
-  async feed() {
-    return await this.articleService.feed();
+  async feed(
+    @CurrentUser('id') userId: number,
+    @Query() reqDto: ArticleFeedReqDto,
+  ): Promise<ArticleListResDto> {
+    return await this.articleService.feed(userId, reqDto);
   }
 
   @Get(':slug')
