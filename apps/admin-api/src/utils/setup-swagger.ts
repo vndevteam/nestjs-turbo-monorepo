@@ -1,4 +1,5 @@
 import { CreateArticleReqDto } from '@/api/article/dto/create-article.dto';
+import { UpdateArticleReqDto } from '@/api/article/dto/update-article.dto';
 import { LoginReqDto } from '@/api/auth/dto/login.dto';
 import { CreateUserReqDto } from '@/api/user/dto/create-user.dto';
 import { UpdateUserReqDto } from '@/api/user/dto/update-user.dto';
@@ -31,6 +32,7 @@ export function setupSwagger(app: INestApplication) {
       CreateUserReqDto,
       UpdateUserReqDto,
       CreateArticleReqDto,
+      UpdateArticleReqDto,
     ],
   });
   SwaggerModule.setup('api-docs', app, document, {

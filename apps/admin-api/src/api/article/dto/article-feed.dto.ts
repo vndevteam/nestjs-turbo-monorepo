@@ -1,7 +1,11 @@
+import { OmitType } from '@nestjs/swagger';
 import { NumberFieldOptional } from '@repo/api';
 import { PageOptionsDto } from '@repo/api/dto/offset-pagination/page-options.dto';
 
-export class ArticleFeedReqDto extends PageOptionsDto {
+export class ArticleFeedReqDto extends OmitType(PageOptionsDto, [
+  'order',
+  'q',
+] as const) {
   @NumberFieldOptional({
     minimum: 1,
     default: 20,

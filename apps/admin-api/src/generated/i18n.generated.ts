@@ -33,6 +33,9 @@ export type I18nTranslations = {
             "already_followed": string;
             "not_followed": string;
         };
+        "article": {
+            "not_found": string;
+        };
     };
 };
 /* prettier-ignore */

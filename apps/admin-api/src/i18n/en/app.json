@@ -26,5 +26,8 @@
     "following_self": "You can't follow yourself",
     "already_followed": "Already following this user",
     "not_followed": "Not following this user"
+  },
+  "article": {
+    "not_found": "Article not found"
   }
 }

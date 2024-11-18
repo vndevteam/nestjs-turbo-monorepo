@@ -1,4 +1,4 @@
-import { ClassField, StringField } from '@repo/api';
+import { BooleanField, ClassField, StringField } from '@repo/api';
 
 export class ProfileDto {
   @StringField({ expose: true })
@@ -10,7 +10,7 @@ export class ProfileDto {
   @StringField({ expose: true })
   image: string;
 
-  @StringField({ expose: true })
+  @BooleanField({ expose: true })
   following: boolean;
 }
 
