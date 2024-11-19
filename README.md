@@ -22,7 +22,7 @@ A monorepo boilerplate built with [Turborepo](https://turbo.build/repo) and [Nes
 git clone https://github.com/vndevteam/nestjs-turbo.git
 
 # Create environment variables file.
-cp apps/admin-api/.env.example apps/admin-api/.env
+cp apps/realworld-api/.env.example apps/realworld-api/.env
 cp apps/user-api/.env.example apps/user-api/.env
 
 # Install dependences.

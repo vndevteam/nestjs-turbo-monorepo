@@ -17,5 +17,5 @@
       "@/interceptors/*": ["src/interceptors/*"],
       "@/utils/*": ["src/utils/*"]
     }
-  },
+  }
 }
