@@ -1,0 +1,47 @@
+services:
+  db:
+    container_name: nestjs-turbo-mysql
+    image: mysql
+    restart: always
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: realworld_api
+      MYSQL_ROOT_PASSWORD: 12345678
+    ports:
+      - "13306:3306"
+    networks:
+      - nestjs-turbo-network
+
+  redis:
+    image: redis/redis-stack:latest
+    restart: always
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+    environment:
+      REDIS_ARGS: "--requirepass redispass"
+    networks:
+      - nestjs-turbo-network
+
+  maildev:
+    build:
+      context: .
+      dockerfile: maildev.Dockerfile
+    ports:
+      - ${MAIL_CLIENT_PORT}:1080
+      - ${MAIL_PORT}:1025
+    networks:
+      - nestjs-turbo-network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  nestjs-turbo-network:
+    driver: bridge

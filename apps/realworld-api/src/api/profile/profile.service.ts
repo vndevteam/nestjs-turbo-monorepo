@@ -2,8 +2,7 @@ import { ErrorCode } from '@/constants/error-code.constant';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ValidationException } from '@repo/api';
-import { UserEntity } from '@repo/database-typeorm';
-import { UserFollowsEntity } from '@repo/database-typeorm/entities/user-follows.entity';
+import { UserEntity, UserFollowsEntity } from '@repo/database-typeorm';
 import { Repository } from 'typeorm';
 import { ProfileDto, ProfileResDto } from './dto/profile.dto';
 
