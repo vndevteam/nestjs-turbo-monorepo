@@ -21,6 +21,7 @@ import authConfig from './api/auth/config/auth.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AllConfigType } from './config/config.type';
+// import { TypeOrmConfigService } from './database/mysql-typeorm-config.service'; // Uncomment this line if you are using MySQL
 import { TypeOrmConfigService } from './database/typeorm-config.service';
 
 const configModule = ConfigModule.forRoot({
