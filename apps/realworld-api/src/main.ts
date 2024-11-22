@@ -124,7 +124,10 @@ async function bootstrap() {
     setupSwagger(app);
   }
 
-  await app.listen(configService.getOrThrow('app.port', { infer: true }));
+  await app.listen(
+    configService.getOrThrow('app.port', { infer: true }) as number,
+    '0.0.0.0',
+  );
 }
 
 bootstrap();
