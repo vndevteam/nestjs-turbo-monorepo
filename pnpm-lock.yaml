@@ -108,9 +108,9 @@ importers:
       '@repo/api':
         specifier: workspace:*
         version: link:../../packages/api
-      '@repo/mysql-typeorm':
+      '@repo/database-typeorm':
         specifier: workspace:*
-        version: link:../../packages/mysql-typeorm
+        version: link:../../packages/database-typeorm
       '@repo/nest-common':
         specifier: workspace:*
         version: link:../../packages/nest-common
@@ -10186,7 +10186,7 @@ snapshots:
   env-cmd@10.1.0:
     dependencies:
       commander: 4.1.1
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.5
 
   environment@1.1.0: {}
 
