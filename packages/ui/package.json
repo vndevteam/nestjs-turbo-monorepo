@@ -20,8 +20,8 @@
     "@types/node": "^20.11.24",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
-    "eslint": "^9.13.0",
-    "typescript": "^5.3.3"
+    "eslint": "^9.15.0",
+    "typescript": "^5.7.2"
   },
   "dependencies": {
     "react": "^18.2.0"
