@@ -8,7 +8,7 @@ export class UserFavoritesSeeder1732032454792 implements Seeder {
 
   public async run(
     dataSource: DataSource,
-    factoryManager: SeederFactoryManager,
+    _factoryManager: SeederFactoryManager,
   ): Promise<any> {
     // Get random users
     const userRepository = dataSource.getRepository(UserEntity);
