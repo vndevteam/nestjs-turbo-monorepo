@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Article {
+  id             Int              @id(map: "PK_article_id") @default(autoincrement())
+  slug           String           @unique(map: "UQ_article_slug") @db.VarChar
+  title          String           @db.VarChar
+  description    String           @default("") @db.VarChar
+  body           String           @default("") @db.VarChar
+  author_id      Int
+  created_at     DateTime         @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime         @default(now()) @db.Timestamptz(6)
+  user           User             @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_article_user")
+  article_to_tag ArticleToTag[]
+  comment        Comment[]
+  user_favorites UserFavorites[]
+
+  @@map("article")
+}
+
+model ArticleToTag {
+  article_id Int
+  tag_id     Int
+  article    Article @relation(fields: [article_id], references: [id], onDelete: Cascade, map: "FK_article_to_tag_article")
+  tag        Tag     @relation(fields: [tag_id], references: [id], onDelete: Cascade, map: "FK_article_to_tag_tag")
+
+  @@id([article_id, tag_id], map: "PK_4c89558cd6aba7068f591dfafb5")
+  @@index([tag_id], map: "IDX_991d528d94da3e1b66444208ed")
+  @@index([article_id], map: "IDX_fd50220e818ef33364f75af495")
+
+  @@map("article_to_tag")
+}
+
+model Comment {
+  id         Int      @id(map: "PK_comment_id") @default(autoincrement())
+  body       String   @db.VarChar
+  article_id Int
+  author_id  Int
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+  article    Article  @relation(fields: [article_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_comment_article")
+  user       User     @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_comment_user")
+
+  @@map("comment")
+}
+
+model Tag {
+  id             Int              @id(map: "PK_tag_id") @default(autoincrement())
+  name           String           @unique(map: "UQ_tag_name") @db.VarChar
+  article_to_tag ArticleToTag[]
+
+  @@map("tag")
+}
+
+model User {
+  id                                          Int              @id(map: "PK_user_id") @default(autoincrement())
+  username                                    String           @unique(map: "UQ_user_username") @db.VarChar
+  email                                       String           @unique(map: "UQ_user_email") @db.VarChar
+  password                                    String           @db.VarChar
+  image                                       String           @default("") @db.VarChar
+  bio                                         String           @default("") @db.VarChar
+  article                                     Article[]
+  comment                                     Comment[]
+  user_favorites                              UserFavorites[]
+  user_follows_user_follows_followee_idTouser UserFollows[]   @relation("user_follows_followee_idTouser")
+  user_follows_user_follows_follower_idTouser UserFollows[]   @relation("user_follows_follower_idTouser")
+
+  @@map("user")
+}
+
+model UserFavorites {
+  user_id    Int
+  article_id Int
+  article    Article @relation(fields: [article_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_user_favorites_article")
+  user       User    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "FK_user_favorites_user")
+
+  @@id([user_id, article_id], map: "PK_844adcf6e9231c9afb76fe2e4ce")
+  @@index([user_id], map: "IDX_5238ce0a21cc77dc16c8efe3d3")
+  @@index([article_id], map: "IDX_57c7c9e22aad40815268f28b5f")
+
+  @@map("user_favorites")
+}
+
+model UserFollows {
+  id                                  Int  @id(map: "PK_user_follows_id") @default(autoincrement())
+  follower_id                         Int
+  followee_id                         Int
+  user_user_follows_followee_idTouser User @relation("user_follows_followee_idTouser", fields: [followee_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_user_follows_followee_id")
+  user_user_follows_follower_idTouser User @relation("user_follows_follower_idTouser", fields: [follower_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_user_follows_follower_id")
+
+  @@unique([follower_id, followee_id], map: "UQ_user_follows_follower_id_followee_id")
+  @@index([followee_id], map: "UQ_user_follows_followee_id")
+  @@index([follower_id], map: "UQ_user_follows_follower_id")
+
+  @@map("user_follows")
+}
