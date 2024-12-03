@@ -27,7 +27,8 @@
     "migrate:status": "prisma migrate status",
     "migrate:resolve": "prisma migrate resolve",
     "migrate:diff": "prisma migrate diff",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "prisma:studio": "prisma studio"
   },
   "dependencies": {
     "@fastify/compress": "^7.0.3",
