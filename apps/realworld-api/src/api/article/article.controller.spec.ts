@@ -111,7 +111,7 @@ describe('ArticleController', () => {
         expect(errors.length).toBe(0);
       });
 
-      it.skip('should fail validation if limit is negative', async () => {
+      it('should fail validation if limit is negative', async () => {
         const invalidData: ArticleListReqDto = {
           tag: 'nestjs',
           author: 'testuser',
@@ -127,7 +127,7 @@ describe('ArticleController', () => {
         expect(errors[0].property).toBe('limit');
       });
 
-      it.skip('should fail validation if offset is negative', async () => {
+      it('should fail validation if offset is negative', async () => {
         const invalidData = {
           tag: 'nestjs',
           author: 'testuser',
