@@ -7,14 +7,14 @@ import {
 
 export class PageOptionsDto {
   @NumberFieldOptional({
-    minimum: 1,
+    min: 1,
     default: DEFAULT_PAGE_LIMIT,
     int: true,
   })
   readonly limit: number = DEFAULT_PAGE_LIMIT;
 
   @NumberFieldOptional({
-    minimum: 0,
+    min: 0,
     default: 0,
     int: true,
   })

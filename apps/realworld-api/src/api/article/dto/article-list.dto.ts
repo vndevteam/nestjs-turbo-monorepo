@@ -23,14 +23,14 @@ export class ArticleListReqDto extends OmitType(PageOptionsDto, [
   readonly favorited?: string;
 
   @NumberFieldOptional({
-    minimum: 1,
+    min: 1,
     default: 20,
     int: true,
   })
   override readonly limit: number = 20;
 
   @NumberFieldOptional({
-    minimum: 0,
+    min: 0,
     default: 0,
     int: true,
   })
